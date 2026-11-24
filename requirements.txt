@@ -1,0 +1,61 @@
+# ==============================================================================
+# Production RAG Service — Python Dependencies
+# Derived from docs/plan_build.html (Phase 1 Core + Phase 2 Extended)
+# ==============================================================================
+
+# --- Core Web Framework & Configuration ---
+fastapi
+uvicorn[standard]
+python-multipart
+pydantic
+pydantic-settings
+python-dotenv
+email-validator
+
+# --- Database & Vector Store (Neon Postgres + pgvector) ---
+sqlalchemy[asyncio]
+asyncpg
+pgvector
+alembic
+
+# --- LLM, Embeddings & Reranking ---
+cohere
+groq
+httpx
+tenacity
+
+# --- Document Extraction, Validation & Chunking ---
+PyMuPDF
+pdfplumber
+python-docx
+python-pptx
+chardet
+filetype
+python-magic; sys_platform != "win32"
+python-magic-bin; sys_platform == "win32"
+tiktoken
+
+# --- Security, Authentication & Rate Limiting ---
+slowapi
+PyJWT
+pwdlib[argon2]
+
+# --- Observability & Evaluation ---
+langfuse
+ragas
+datasets
+langchain-groq
+langchain-cohere
+python-json-logger
+pandas
+numpy
+
+# --- Notebooks (Milestone 3 Prototyping) ---
+ipykernel
+jupyterlab
+
+# --- Testing & Code Quality ---
+pytest
+pytest-asyncio
+pytest-cov
+ruff
