@@ -1,0 +1,23 @@
+ACME Cloud Corp — Information Security & Data Handling Guidelines (SEC-2026)
+
+1. Secret Management
+API keys, database credentials, and JWT signing secrets must never be committed to Git
+repositories or logged in application output. All secrets are stored in environment
+variables or a managed secret vault and rotated every 90 days.
+
+2. Document Upload Security
+All user-uploaded files must pass strict extension allowlisting, file size enforcement
+(maximum 20 MB), and content signature verification (magic bytes for binary formats
+and UTF-8 structural verification for text and CSV files). Files failing validation
+must be rejected immediately with HTTP 415 Unsupported Media Type.
+
+3. Prompt Injection Defense
+Text extracted from external user documents is treated as untrusted data. All retrieved
+context chunks must be isolated inside <retrieved_context> XML tags prior to LLM
+inference, and outbound responses must be scrubbed for leaked credentials (such as
+tokens starting with gsk_ or postgres:// connection strings).
+
+4. Multi-Tenant Data Isolation
+Every database query operating on documents or vector chunks must filter strictly by
+the authenticated user_id column. Cross-tenant vector leakage is classified as a SEV-1
+security incident.

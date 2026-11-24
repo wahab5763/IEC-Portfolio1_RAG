@@ -1,61 +1,61 @@
 # ==============================================================================
-# Production RAG Service — Python Dependencies
+# Production RAG Service — Pinned Python Dependencies
 # Derived from docs/plan_build.html (Phase 1 Core + Phase 2 Extended)
 # ==============================================================================
 
 # --- Core Web Framework & Configuration ---
-fastapi
-uvicorn[standard]
-python-multipart
-pydantic
-pydantic-settings
-python-dotenv
-email-validator
+fastapi==0.165.0
+uvicorn[standard]==0.54.0
+python-multipart==0.0.34
+pydantic==2.14.4
+pydantic-settings==2.16.3
+python-dotenv==1.2.4
+email-validator==2.4.0
 
 # --- Database & Vector Store (Neon Postgres + pgvector) ---
-sqlalchemy[asyncio]
-asyncpg
-pgvector
-alembic
+sqlalchemy[asyncio]==2.1.9
+asyncpg==0.32.0
+pgvector==0.5.1
+alembic==1.20.1
 
 # --- LLM, Embeddings & Reranking ---
-cohere
-groq
-httpx
-tenacity
+cohere==5.21.1
+groq==1.7.0
+httpx==0.28.1
+tenacity==8.5.0
 
 # --- Document Extraction, Validation & Chunking ---
-PyMuPDF
-pdfplumber
-python-docx
-python-pptx
-chardet
-filetype
-python-magic; sys_platform != "win32"
-python-magic-bin; sys_platform == "win32"
-tiktoken
+PyMuPDF==2.1
+pdfplumber==0.11.11
+python-docx==1.2.0
+python-pptx==1.0.2
+chardet==7.7.0
+filetype==1.2.0
+python-magic==0.4.27; sys_platform != "win32"
+python-magic-bin==0.4.14; sys_platform == "win32"
+tiktoken==0.14.0
 
 # --- Security, Authentication & Rate Limiting ---
-slowapi
-PyJWT
-pwdlib[argon2]
+slowapi==0.1.10
+PyJWT==2.15.1
+pwdlib[argon2]==0.4.2
 
 # --- Observability & Evaluation ---
-langfuse
-ragas
-datasets
-langchain-groq
-langchain-cohere
-python-json-logger
-pandas
-numpy
+langfuse==5.2.0
+ragas==0.4.4
+datasets==5.2.0
+langchain-groq==1.2.1
+langchain-cohere==0.6.0
+python-json-logger==4.2.0
+pandas==3.1.1
+numpy==2.5.5
 
 # --- Notebooks (Milestone 3 Prototyping) ---
-ipykernel
-jupyterlab
+ipykernel==7.4.0
+jupyterlab==4.6.6
 
 # --- Testing & Code Quality ---
-pytest
-pytest-asyncio
-pytest-cov
-ruff
+pytest==9.2.0
+pytest-asyncio==1.5.0
+pytest-cov==7.1.0
+ruff==0.17.6

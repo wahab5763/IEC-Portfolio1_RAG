@@ -1,0 +1,1027 @@
+{
+  "generated_at": "2026-11-24T15:46:27.084447+00:00",
+  "execution_mode": "offline",
+  "dataset_size": 30,
+  "configs": {
+    "config_a_baseline": {
+      "config": "config_a_baseline",
+      "chunk_count": 24,
+      "overall_metrics": {
+        "hit_rate@5": 0.75,
+        "recall@5": 0.75,
+        "mrr": 0.7222,
+        "refusal_accuracy": 0.1667
+      },
+      "english_metrics": {
+        "hit_rate@5": 0.9444,
+        "recall@5": 0.9444,
+        "mrr": 0.9074,
+        "refusal_accuracy": 0.1667
+      },
+      "multilingual_metrics": {
+        "hit_rate@5": 0.1667,
+        "recall@5": 0.1667,
+        "mrr": 0.1667,
+        "refusal_accuracy": 1.0
+      },
+      "cases": [
+        {
+          "id": "q01",
+          "category": "factual",
+          "language": "en",
+          "answerable": true,
+          "expected_files": [
+            "01_company_hr_policy.pdf"
+          ],
+          "retrieved_files": [
+            "01_company_hr_policy.pdf",
+            "03_remote_work_policy_2025.docx",
+            "04_remote_work_addendum_2026.docx",
+            "01_company_hr_policy.pdf",
+            "04_remote_work_addendum_2026.docx"
+          ],
+          "max_score": 0.6237,
+          "refused": false
+        },
+        {
+          "id": "q02",
+          "category": "factual",
+          "language": "en",
+          "answerable": true,
+          "expected_files": [
+            "01_company_hr_policy.pdf"
+          ],
+          "retrieved_files": [
+            "01_company_hr_policy.pdf",
+            "03_remote_work_policy_2025.docx",
+            "02_engineering_handbook.pdf",
+            "05_incident_runbook.md",
+            "01_company_hr_policy.pdf"
+          ],
+          "max_score": 0.6103,
+          "refused": false
+        },
+        {
+          "id": "q03",
+          "category": "tabular",
+          "language": "en",
+          "answerable": true,
+          "expected_files": [
+            "01_company_hr_policy.pdf"
+          ],
+          "retrieved_files": [
+            "01_company_hr_policy.pdf",
+            "06_security_guidelines.txt",
+            "04_remote_work_addendum_2026.docx",
+            "07_q3_product_roadmap.pptx",
+            "01_company_hr_policy.pdf"
+          ],
+          "max_score": 0.5101,
+          "refused": false
+        },
+        {
+          "id": "q04",
+          "category": "tabular",
+          "language": "en",
+          "answerable": true,
+          "expected_files": [
+            "01_company_hr_policy.pdf"
+          ],
+          "retrieved_files": [
+            "01_company_hr_policy.pdf",
+            "03_remote_work_policy_2025.docx",
+            "04_remote_work_addendum_2026.docx",
+            "05_incident_runbook.md",
+            "01_company_hr_policy.pdf"
+          ],
+          "max_score": 0.3466,
+          "refused": false
+        },
+        {
+          "id": "q05",
+          "category": "tabular",
+          "language": "en",
+          "answerable": true,
+          "expected_files": [
+            "02_engineering_handbook.pdf"
+          ],
+          "retrieved_files": [
+            "02_engineering_handbook.pdf",
+            "04_remote_work_addendum_2026.docx",
+            "07_q3_product_roadmap.pptx",
+            "06_security_guidelines.txt",
+            "02_engineering_handbook.pdf"
+          ],
+          "max_score": 0.4517,
+          "refused": false
+        },
+        {
+          "id": "q06",
+          "category": "factual",
+          "language": "en",
+          "answerable": true,
+          "expected_files": [
+            "02_engineering_handbook.pdf"
+          ],
+          "retrieved_files": [
+            "02_engineering_handbook.pdf",
+            "06_security_guidelines.txt",
+            "03_remote_work_policy_2025.docx",
+            "03_remote_work_policy_2025.docx",
+            "07_q3_product_roadmap.pptx"
+          ],
+          "max_score": 0.2727,
+          "refused": false
+        },
+        {
+          "id": "q07",
+          "category": "contradiction",
+          "language": "en",
+          "answerable": true,
+          "expected_files": [
+            "03_remote_work_policy_2025.docx",
+            "04_remote_work_addendum_2026.docx"
+          ],
+          "retrieved_files": [
+            "04_remote_work_addendum_2026.docx",
+            "03_remote_work_policy_2025.docx",
+            "01_company_hr_policy.pdf",
+            "03_remote_work_policy_2025.docx",
+            "04_remote_work_addendum_2026.docx"
+          ],
+          "max_score": 0.5939,
+          "refused": false
+        },
+        {
+          "id": "q08",
+          "category": "contradiction",
+          "language": "en",
+          "answerable": true,
+          "expected_files": [
+            "03_remote_work_policy_2025.docx",
+            "04_remote_work_addendum_2026.docx"
+          ],
+          "retrieved_files": [
+            "04_remote_work_addendum_2026.docx",
+            "03_remote_work_policy_2025.docx",
+            "03_remote_work_policy_2025.docx",
+            "04_remote_work_addendum_2026.docx",
+            "01_company_hr_policy.pdf"
+          ],
+          "max_score": 0.4365,
+          "refused": false
+        },
+        {
+          "id": "q09",
+          "category": "factual",
+          "language": "en",
+          "answerable": true,
+          "expected_files": [
+            "03_remote_work_policy_2025.docx"
+          ],
+          "retrieved_files": [
+            "03_remote_work_policy_2025.docx",
+            "04_remote_work_addendum_2026.docx",
+            "03_remote_work_policy_2025.docx",
+            "02_engineering_handbook.pdf",
+            "05_incident_runbook.md"
+          ],
+          "max_score": 0.3734,
+          "refused": false
+        },
+        {
+          "id": "q10",
+          "category": "tabular",
+          "language": "en",
+          "answerable": true,
+          "expected_files": [
+            "05_incident_runbook.md"
+          ],
+          "retrieved_files": [
+            "05_incident_runbook.md",
+            "05_incident_runbook.md",
+            "06_security_guidelines.txt",
+            "04_remote_work_addendum_2026.docx",
+            "04_remote_work_addendum_2026.docx"
+          ],
+          "max_score": 0.2235,
+          "refused": false
+        },
+        {
+          "id": "q11",
+          "category": "factual",
+          "language": "en",
+          "answerable": true,
+          "expected_files": [
+            "05_incident_runbook.md"
+          ],
+          "retrieved_files": [
+            "05_incident_runbook.md",
+            "06_security_guidelines.txt",
+            "05_incident_runbook.md",
+            "03_remote_work_policy_2025.docx",
+            "02_engineering_handbook.pdf"
+          ],
+          "max_score": 0.8482,
+          "refused": false
+        },
+        {
+          "id": "q12",
+          "category": "factual",
+          "language": "en",
+          "answerable": true,
+          "expected_files": [
+            "05_incident_runbook.md"
+          ],
+          "retrieved_files": [],
+          "max_score": 0.1295,
+          "refused": true
+        },
+        {
+          "id": "q13",
+          "category": "factual",
+          "language": "en",
+          "answerable": true,
+          "expected_files": [
+            "06_security_guidelines.txt"
+          ],
+          "retrieved_files": [
+            "06_security_guidelines.txt",
+            "05_incident_runbook.md",
+            "04_remote_work_addendum_2026.docx",
+            "03_remote_work_policy_2025.docx",
+            "07_q3_product_roadmap.pptx"
+          ],
+          "max_score": 0.3105,
+          "refused": false
+        },
+        {
+          "id": "q14",
+          "category": "factual",
+          "language": "en",
+          "answerable": true,
+          "expected_files": [
+            "06_security_guidelines.txt"
+          ],
+          "retrieved_files": [
+            "06_security_guidelines.txt",
+            "07_q3_product_roadmap.pptx",
+            "07_q3_product_roadmap.pptx",
+            "04_remote_work_addendum_2026.docx",
+            "08_regional_sales_2025.csv"
+          ],
+          "max_score": 0.2205,
+          "refused": false
+        },
+        {
+          "id": "q15",
+          "category": "factual",
+          "language": "en",
+          "answerable": true,
+          "expected_files": [
+            "07_q3_product_roadmap.pptx"
+          ],
+          "retrieved_files": [
+            "07_q3_product_roadmap.pptx",
+            "07_q3_product_roadmap.pptx",
+            "05_incident_runbook.md",
+            "04_remote_work_addendum_2026.docx",
+            "07_q3_product_roadmap.pptx"
+          ],
+          "max_score": 0.1622,
+          "refused": false
+        },
+        {
+          "id": "q16",
+          "category": "tabular",
+          "language": "en",
+          "answerable": true,
+          "expected_files": [
+            "07_q3_product_roadmap.pptx"
+          ],
+          "retrieved_files": [
+            "07_q3_product_roadmap.pptx",
+            "07_q3_product_roadmap.pptx",
+            "04_remote_work_addendum_2026.docx",
+            "02_engineering_handbook.pdf",
+            "04_remote_work_addendum_2026.docx"
+          ],
+          "max_score": 0.5229,
+          "refused": false
+        },
+        {
+          "id": "q17",
+          "category": "tabular",
+          "language": "en",
+          "answerable": true,
+          "expected_files": [
+            "08_regional_sales_2025.csv"
+          ],
+          "retrieved_files": [
+            "08_regional_sales_2025.csv",
+            "04_remote_work_addendum_2026.docx",
+            "06_security_guidelines.txt",
+            "05_incident_runbook.md",
+            "07_q3_product_roadmap.pptx"
+          ],
+          "max_score": 0.3805,
+          "refused": false
+        },
+        {
+          "id": "q18",
+          "category": "multi_chunk",
+          "language": "en",
+          "answerable": true,
+          "expected_files": [
+            "02_engineering_handbook.pdf",
+            "05_incident_runbook.md"
+          ],
+          "retrieved_files": [
+            "04_remote_work_addendum_2026.docx",
+            "04_remote_work_addendum_2026.docx",
+            "05_incident_runbook.md",
+            "05_incident_runbook.md",
+            "02_engineering_handbook.pdf"
+          ],
+          "max_score": 0.2123,
+          "refused": false
+        },
+        {
+          "id": "q19",
+          "category": "unanswerable",
+          "language": "en",
+          "answerable": false,
+          "expected_files": [],
+          "retrieved_files": [
+            "06_security_guidelines.txt",
+            "01_company_hr_policy.pdf",
+            "07_q3_product_roadmap.pptx",
+            "04_remote_work_addendum_2026.docx",
+            "07_q3_product_roadmap.pptx"
+          ],
+          "max_score": 0.1431,
+          "refused": false
+        },
+        {
+          "id": "q20",
+          "category": "unanswerable",
+          "language": "en",
+          "answerable": false,
+          "expected_files": [],
+          "retrieved_files": [
+            "01_company_hr_policy.pdf",
+            "06_security_guidelines.txt",
+            "04_remote_work_addendum_2026.docx",
+            "07_q3_product_roadmap.pptx",
+            "02_engineering_handbook.pdf"
+          ],
+          "max_score": 0.19,
+          "refused": false
+        },
+        {
+          "id": "q21",
+          "category": "unanswerable",
+          "language": "en",
+          "answerable": false,
+          "expected_files": [],
+          "retrieved_files": [
+            "04_remote_work_addendum_2026.docx",
+            "01_company_hr_policy.pdf",
+            "04_remote_work_addendum_2026.docx",
+            "07_q3_product_roadmap.pptx",
+            "06_security_guidelines.txt"
+          ],
+          "max_score": 0.2098,
+          "refused": false
+        },
+        {
+          "id": "q22",
+          "category": "unanswerable",
+          "language": "en",
+          "answerable": false,
+          "expected_files": [],
+          "retrieved_files": [],
+          "max_score": 0.114,
+          "refused": true
+        },
+        {
+          "id": "q23",
+          "category": "unanswerable",
+          "language": "en",
+          "answerable": false,
+          "expected_files": [],
+          "retrieved_files": [
+            "01_company_hr_policy.pdf",
+            "07_q3_product_roadmap.pptx",
+            "07_q3_product_roadmap.pptx",
+            "06_security_guidelines.txt",
+            "07_q3_product_roadmap.pptx"
+          ],
+          "max_score": 0.1906,
+          "refused": false
+        },
+        {
+          "id": "q24",
+          "category": "unanswerable",
+          "language": "en",
+          "answerable": false,
+          "expected_files": [],
+          "retrieved_files": [
+            "02_engineering_handbook.pdf",
+            "05_incident_runbook.md",
+            "03_remote_work_policy_2025.docx",
+            "03_remote_work_policy_2025.docx",
+            "01_company_hr_policy.pdf"
+          ],
+          "max_score": 0.1463,
+          "refused": false
+        },
+        {
+          "id": "q25",
+          "category": "multilingual",
+          "language": "ur",
+          "answerable": true,
+          "expected_files": [
+            "01_company_hr_policy.pdf"
+          ],
+          "retrieved_files": [],
+          "max_score": 0.0,
+          "refused": true
+        },
+        {
+          "id": "q26",
+          "category": "multilingual",
+          "language": "ur",
+          "answerable": true,
+          "expected_files": [
+            "06_security_guidelines.txt"
+          ],
+          "retrieved_files": [],
+          "max_score": 0.0855,
+          "refused": true
+        },
+        {
+          "id": "q27",
+          "category": "multilingual",
+          "language": "ur",
+          "answerable": true,
+          "expected_files": [
+            "05_incident_runbook.md"
+          ],
+          "retrieved_files": [
+            "05_incident_runbook.md",
+            "05_incident_runbook.md",
+            "02_engineering_handbook.pdf",
+            "06_security_guidelines.txt",
+            "01_company_hr_policy.pdf"
+          ],
+          "max_score": 0.2105,
+          "refused": false
+        },
+        {
+          "id": "q28",
+          "category": "multilingual",
+          "language": "ar",
+          "answerable": true,
+          "expected_files": [
+            "01_company_hr_policy.pdf"
+          ],
+          "retrieved_files": [],
+          "max_score": 0.0,
+          "refused": true
+        },
+        {
+          "id": "q29",
+          "category": "multilingual",
+          "language": "ar",
+          "answerable": true,
+          "expected_files": [
+            "01_company_hr_policy.pdf"
+          ],
+          "retrieved_files": [],
+          "max_score": 0.1023,
+          "refused": true
+        },
+        {
+          "id": "q30",
+          "category": "multilingual",
+          "language": "ar",
+          "answerable": true,
+          "expected_files": [
+            "06_security_guidelines.txt"
+          ],
+          "retrieved_files": [],
+          "max_score": 0.0,
+          "refused": true
+        }
+      ]
+    },
+    "config_b_optimized": {
+      "config": "config_b_optimized",
+      "chunk_count": 25,
+      "overall_metrics": {
+        "hit_rate@5": 0.75,
+        "recall@5": 0.7292,
+        "mrr": 0.75,
+        "refusal_accuracy": 0.3333
+      },
+      "english_metrics": {
+        "hit_rate@5": 1.0,
+        "recall@5": 0.9722,
+        "mrr": 1.0,
+        "refusal_accuracy": 0.3333
+      },
+      "multilingual_metrics": {
+        "hit_rate@5": 0.0,
+        "recall@5": 0.0,
+        "mrr": 0.0,
+        "refusal_accuracy": 1.0
+      },
+      "cases": [
+        {
+          "id": "q01",
+          "category": "factual",
+          "language": "en",
+          "answerable": true,
+          "expected_files": [
+            "01_company_hr_policy.pdf"
+          ],
+          "retrieved_files": [
+            "01_company_hr_policy.pdf",
+            "03_remote_work_policy_2025.docx",
+            "04_remote_work_addendum_2026.docx",
+            "01_company_hr_policy.pdf",
+            "03_remote_work_policy_2025.docx"
+          ],
+          "max_score": 0.6189,
+          "refused": false
+        },
+        {
+          "id": "q02",
+          "category": "factual",
+          "language": "en",
+          "answerable": true,
+          "expected_files": [
+            "01_company_hr_policy.pdf"
+          ],
+          "retrieved_files": [
+            "01_company_hr_policy.pdf",
+            "03_remote_work_policy_2025.docx",
+            "06_security_guidelines.txt",
+            "02_engineering_handbook.pdf",
+            "07_q3_product_roadmap.pptx"
+          ],
+          "max_score": 0.5902,
+          "refused": false
+        },
+        {
+          "id": "q03",
+          "category": "tabular",
+          "language": "en",
+          "answerable": true,
+          "expected_files": [
+            "01_company_hr_policy.pdf"
+          ],
+          "retrieved_files": [
+            "01_company_hr_policy.pdf",
+            "06_security_guidelines.txt",
+            "04_remote_work_addendum_2026.docx",
+            "03_remote_work_policy_2025.docx",
+            "01_company_hr_policy.pdf"
+          ],
+          "max_score": 0.5177,
+          "refused": false
+        },
+        {
+          "id": "q04",
+          "category": "tabular",
+          "language": "en",
+          "answerable": true,
+          "expected_files": [
+            "01_company_hr_policy.pdf"
+          ],
+          "retrieved_files": [
+            "01_company_hr_policy.pdf",
+            "03_remote_work_policy_2025.docx",
+            "04_remote_work_addendum_2026.docx",
+            "01_company_hr_policy.pdf",
+            "06_security_guidelines.txt"
+          ],
+          "max_score": 0.3926,
+          "refused": false
+        },
+        {
+          "id": "q05",
+          "category": "tabular",
+          "language": "en",
+          "answerable": true,
+          "expected_files": [
+            "02_engineering_handbook.pdf"
+          ],
+          "retrieved_files": [
+            "02_engineering_handbook.pdf",
+            "06_security_guidelines.txt",
+            "04_remote_work_addendum_2026.docx",
+            "07_q3_product_roadmap.pptx",
+            "02_engineering_handbook.pdf"
+          ],
+          "max_score": 0.4273,
+          "refused": false
+        },
+        {
+          "id": "q06",
+          "category": "factual",
+          "language": "en",
+          "answerable": true,
+          "expected_files": [
+            "02_engineering_handbook.pdf"
+          ],
+          "retrieved_files": [
+            "02_engineering_handbook.pdf",
+            "06_security_guidelines.txt",
+            "05_incident_runbook.md",
+            "05_incident_runbook.md",
+            "07_q3_product_roadmap.pptx"
+          ],
+          "max_score": 0.265,
+          "refused": false
+        },
+        {
+          "id": "q07",
+          "category": "contradiction",
+          "language": "en",
+          "answerable": true,
+          "expected_files": [
+            "03_remote_work_policy_2025.docx",
+            "04_remote_work_addendum_2026.docx"
+          ],
+          "retrieved_files": [
+            "04_remote_work_addendum_2026.docx",
+            "03_remote_work_policy_2025.docx",
+            "01_company_hr_policy.pdf",
+            "03_remote_work_policy_2025.docx",
+            "04_remote_work_addendum_2026.docx"
+          ],
+          "max_score": 0.4741,
+          "refused": false
+        },
+        {
+          "id": "q08",
+          "category": "contradiction",
+          "language": "en",
+          "answerable": true,
+          "expected_files": [
+            "03_remote_work_policy_2025.docx",
+            "04_remote_work_addendum_2026.docx"
+          ],
+          "retrieved_files": [
+            "04_remote_work_addendum_2026.docx",
+            "03_remote_work_policy_2025.docx",
+            "03_remote_work_policy_2025.docx",
+            "04_remote_work_addendum_2026.docx",
+            "01_company_hr_policy.pdf"
+          ],
+          "max_score": 0.5973,
+          "refused": false
+        },
+        {
+          "id": "q09",
+          "category": "factual",
+          "language": "en",
+          "answerable": true,
+          "expected_files": [
+            "03_remote_work_policy_2025.docx"
+          ],
+          "retrieved_files": [
+            "03_remote_work_policy_2025.docx",
+            "04_remote_work_addendum_2026.docx",
+            "05_incident_runbook.md",
+            "02_engineering_handbook.pdf",
+            "01_company_hr_policy.pdf"
+          ],
+          "max_score": 0.3204,
+          "refused": false
+        },
+        {
+          "id": "q10",
+          "category": "tabular",
+          "language": "en",
+          "answerable": true,
+          "expected_files": [
+            "05_incident_runbook.md"
+          ],
+          "retrieved_files": [
+            "05_incident_runbook.md",
+            "05_incident_runbook.md",
+            "05_incident_runbook.md",
+            "06_security_guidelines.txt",
+            "05_incident_runbook.md"
+          ],
+          "max_score": 0.3216,
+          "refused": false
+        },
+        {
+          "id": "q11",
+          "category": "factual",
+          "language": "en",
+          "answerable": true,
+          "expected_files": [
+            "05_incident_runbook.md"
+          ],
+          "retrieved_files": [
+            "05_incident_runbook.md",
+            "06_security_guidelines.txt",
+            "05_incident_runbook.md",
+            "02_engineering_handbook.pdf",
+            "03_remote_work_policy_2025.docx"
+          ],
+          "max_score": 0.6779,
+          "refused": false
+        },
+        {
+          "id": "q12",
+          "category": "factual",
+          "language": "en",
+          "answerable": true,
+          "expected_files": [
+            "05_incident_runbook.md"
+          ],
+          "retrieved_files": [
+            "05_incident_runbook.md",
+            "05_incident_runbook.md",
+            "04_remote_work_addendum_2026.docx",
+            "06_security_guidelines.txt",
+            "07_q3_product_roadmap.pptx"
+          ],
+          "max_score": 0.4181,
+          "refused": false
+        },
+        {
+          "id": "q13",
+          "category": "factual",
+          "language": "en",
+          "answerable": true,
+          "expected_files": [
+            "06_security_guidelines.txt"
+          ],
+          "retrieved_files": [
+            "06_security_guidelines.txt",
+            "05_incident_runbook.md",
+            "04_remote_work_addendum_2026.docx",
+            "03_remote_work_policy_2025.docx",
+            "07_q3_product_roadmap.pptx"
+          ],
+          "max_score": 0.3088,
+          "refused": false
+        },
+        {
+          "id": "q14",
+          "category": "factual",
+          "language": "en",
+          "answerable": true,
+          "expected_files": [
+            "06_security_guidelines.txt"
+          ],
+          "retrieved_files": [
+            "06_security_guidelines.txt",
+            "07_q3_product_roadmap.pptx",
+            "07_q3_product_roadmap.pptx",
+            "08_regional_sales_2025.csv",
+            "04_remote_work_addendum_2026.docx"
+          ],
+          "max_score": 0.2155,
+          "refused": false
+        },
+        {
+          "id": "q15",
+          "category": "factual",
+          "language": "en",
+          "answerable": true,
+          "expected_files": [
+            "07_q3_product_roadmap.pptx"
+          ],
+          "retrieved_files": [
+            "07_q3_product_roadmap.pptx",
+            "07_q3_product_roadmap.pptx",
+            "07_q3_product_roadmap.pptx",
+            "06_security_guidelines.txt",
+            "07_q3_product_roadmap.pptx"
+          ],
+          "max_score": 0.2907,
+          "refused": false
+        },
+        {
+          "id": "q16",
+          "category": "tabular",
+          "language": "en",
+          "answerable": true,
+          "expected_files": [
+            "07_q3_product_roadmap.pptx"
+          ],
+          "retrieved_files": [
+            "07_q3_product_roadmap.pptx",
+            "07_q3_product_roadmap.pptx",
+            "04_remote_work_addendum_2026.docx",
+            "06_security_guidelines.txt",
+            "07_q3_product_roadmap.pptx"
+          ],
+          "max_score": 0.482,
+          "refused": false
+        },
+        {
+          "id": "q17",
+          "category": "tabular",
+          "language": "en",
+          "answerable": true,
+          "expected_files": [
+            "08_regional_sales_2025.csv"
+          ],
+          "retrieved_files": [
+            "08_regional_sales_2025.csv",
+            "08_regional_sales_2025.csv",
+            "08_regional_sales_2025.csv",
+            "06_security_guidelines.txt",
+            "04_remote_work_addendum_2026.docx"
+          ],
+          "max_score": 0.4588,
+          "refused": false
+        },
+        {
+          "id": "q18",
+          "category": "multi_chunk",
+          "language": "en",
+          "answerable": true,
+          "expected_files": [
+            "02_engineering_handbook.pdf",
+            "05_incident_runbook.md"
+          ],
+          "retrieved_files": [
+            "05_incident_runbook.md",
+            "05_incident_runbook.md",
+            "05_incident_runbook.md",
+            "04_remote_work_addendum_2026.docx",
+            "05_incident_runbook.md"
+          ],
+          "max_score": 0.2183,
+          "refused": false
+        },
+        {
+          "id": "q19",
+          "category": "unanswerable",
+          "language": "en",
+          "answerable": false,
+          "expected_files": [],
+          "retrieved_files": [
+            "01_company_hr_policy.pdf",
+            "06_security_guidelines.txt",
+            "02_engineering_handbook.pdf",
+            "04_remote_work_addendum_2026.docx",
+            "07_q3_product_roadmap.pptx"
+          ],
+          "max_score": 0.1804,
+          "refused": false
+        },
+        {
+          "id": "q20",
+          "category": "unanswerable",
+          "language": "en",
+          "answerable": false,
+          "expected_files": [],
+          "retrieved_files": [
+            "01_company_hr_policy.pdf",
+            "06_security_guidelines.txt",
+            "02_engineering_handbook.pdf",
+            "04_remote_work_addendum_2026.docx",
+            "02_engineering_handbook.pdf"
+          ],
+          "max_score": 0.2494,
+          "refused": false
+        },
+        {
+          "id": "q21",
+          "category": "unanswerable",
+          "language": "en",
+          "answerable": false,
+          "expected_files": [],
+          "retrieved_files": [
+            "01_company_hr_policy.pdf",
+            "06_security_guidelines.txt",
+            "04_remote_work_addendum_2026.docx",
+            "04_remote_work_addendum_2026.docx",
+            "02_engineering_handbook.pdf"
+          ],
+          "max_score": 0.1579,
+          "refused": false
+        },
+        {
+          "id": "q22",
+          "category": "unanswerable",
+          "language": "en",
+          "answerable": false,
+          "expected_files": [],
+          "retrieved_files": [],
+          "max_score": 0.1176,
+          "refused": true
+        },
+        {
+          "id": "q23",
+          "category": "unanswerable",
+          "language": "en",
+          "answerable": false,
+          "expected_files": [],
+          "retrieved_files": [
+            "01_company_hr_policy.pdf",
+            "07_q3_product_roadmap.pptx",
+            "06_security_guidelines.txt",
+            "02_engineering_handbook.pdf",
+            "07_q3_product_roadmap.pptx"
+          ],
+          "max_score": 0.2022,
+          "refused": false
+        },
+        {
+          "id": "q24",
+          "category": "unanswerable",
+          "language": "en",
+          "answerable": false,
+          "expected_files": [],
+          "retrieved_files": [],
+          "max_score": 0.1388,
+          "refused": true
+        },
+        {
+          "id": "q25",
+          "category": "multilingual",
+          "language": "ur",
+          "answerable": true,
+          "expected_files": [
+            "01_company_hr_policy.pdf"
+          ],
+          "retrieved_files": [],
+          "max_score": 0.0,
+          "refused": true
+        },
+        {
+          "id": "q26",
+          "category": "multilingual",
+          "language": "ur",
+          "answerable": true,
+          "expected_files": [
+            "06_security_guidelines.txt"
+          ],
+          "retrieved_files": [],
+          "max_score": 0.0847,
+          "refused": true
+        },
+        {
+          "id": "q27",
+          "category": "multilingual",
+          "language": "ur",
+          "answerable": true,
+          "expected_files": [
+            "05_incident_runbook.md"
+          ],
+          "retrieved_files": [],
+          "max_score": 0.1305,
+          "refused": true
+        },
+        {
+          "id": "q28",
+          "category": "multilingual",
+          "language": "ar",
+          "answerable": true,
+          "expected_files": [
+            "01_company_hr_policy.pdf"
+          ],
+          "retrieved_files": [],
+          "max_score": 0.0,
+          "refused": true
+        },
+        {
+          "id": "q29",
+          "category": "multilingual",
+          "language": "ar",
+          "answerable": true,
+          "expected_files": [
+            "01_company_hr_policy.pdf"
+          ],
+          "retrieved_files": [],
+          "max_score": 0.0892,
+          "refused": true
+        },
+        {
+          "id": "q30",
+          "category": "multilingual",
+          "language": "ar",
+          "answerable": true,
+          "expected_files": [
+            "06_security_guidelines.txt"
+          ],
+          "retrieved_files": [],
+          "max_score": 0.0,
+          "refused": true
+        }
+      ]
+    }
+  }
+}

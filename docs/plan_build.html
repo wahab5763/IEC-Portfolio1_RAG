@@ -487,6 +487,30 @@
       color: var(--text);
     }
 
+    /* Architecture Figure */
+    .arch-figure {
+      margin: 18px 0 22px;
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      text-align: center;
+    }
+
+    .arch-figure img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      display: block;
+    }
+
+    .arch-figure figcaption {
+      margin-top: 10px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
     /* Responsive */
     @media (max-width: 960px) {
       .sidebar {
@@ -577,15 +601,21 @@
 
         <h3>Project Goal</h3>
         <p>
-          Build a production-grade, code-first Retrieval-Augmented Generation (RAG) service. The system is engineered around a FastAPI asynchronous backend, a web frontend, Neon Postgres with native <code>pgvector</code> for hybrid vector and keyword search, strict multi-layer security guardrails, automated pytest test suites, and an evaluation harness using RAGAS and custom retrieval metrics.
+          Build a production-grade, code-first Retrieval-Augmented Generation (RAG) service capable of ingesting heterogeneous, real-world document corpora (<code>.pdf</code>, <code>.docx</code>, <code>.txt</code>, <code>.md</code>, <code>.pptx</code>, and <code>.csv</code>) through a pluggable extraction architecture. The system is engineered around a FastAPI asynchronous backend, a web frontend, Neon Postgres with native <code>pgvector</code> for hybrid vector and keyword search, strict multi-layer security guardrails, automated pytest test suites, and an evaluation harness using RAGAS and custom retrieval metrics.
         </p>
+
+        <h3>System Architecture Blueprint</h3>
+        <figure class="arch-figure">
+          <img src="architecture.png" alt="Production RAG Service — End-to-End System Architecture" />
+          <figcaption>End-to-end architecture: Pluggable multi-format ingestion (PDF, DOCX, TXT, MD, PPTX, CSV), Neon Postgres + pgvector single-store data layer, hybrid RRF retrieval + reranking, XML-fenced Groq generation, multi-layer guardrails, and RAGAS/Langfuse observability.</figcaption>
+        </figure>
 
         <h3>Phased Architecture Scope</h3>
         <div class="grid-2">
           <div class="card">
             <h4>Phase 1: Core RAG Platform</h4>
             <p style="margin-bottom: 0;">
-              Adopt a <strong>Notebook-First workflow</strong> to validate extraction, recursive chunking, embedding generation, hybrid retrieval (vector + full-text search), and LLM answering before freezing schema and building API routes. Core capabilities include text extraction (PDF/DOCX), structure-aware recursive chunking, vector embedding generation, single-store PostgreSQL + <code>pgvector</code> persistence, grounded LLM generation via Groq API, REST API endpoints, plain HTML/CSS/JS frontend, structured error handling, unit/integration tests, RAGAS evaluation, and system documentation (<code>README.md</code>, <code>DESIGN.md</code>, <code>EVAL.md</code>).
+              Adopt a <strong>Notebook-First workflow</strong> to validate multi-format extraction, recursive &amp; tabular chunking, embedding generation, hybrid retrieval (vector + full-text search), and LLM answering before freezing schema and building API routes. Core capabilities include a <strong>pluggable universal extraction layer</strong> supporting <code>.pdf</code>, <code>.docx</code>, <code>.txt</code>, <code>.md</code>, <code>.pptx</code>, and <code>.csv</code>, format-aware recursive &amp; row-batch chunking, vector embedding generation, single-store PostgreSQL + <code>pgvector</code> persistence, grounded LLM generation via Groq API, REST API endpoints, plain HTML/CSS/JS frontend, structured error handling, unit/integration tests, RAGAS evaluation, and system documentation (<code>README.md</code>, <code>DESIGN.md</code>, <code>EVAL.md</code>).
             </p>
           </div>
           <div class="card">
@@ -594,8 +624,8 @@
             <ul style="margin-bottom: 0;">
               <li><strong>Modern React SPA</strong>: React + Vite + Tailwind + shadcn/ui frontend upgrade.</li>
               <li><strong>Full Edge Case Matrix</strong>: End-to-end handling across all 12 production edge cases.</li>
-              <li><strong>Extended Document Formats</strong>: Support for <code>.txt</code>, <code>.md</code>, and <code>.pptx</code> documents.</li>
-              <li><strong>Document Security Guardrails</strong>: Magic-byte validation, file size limits, and XML prompt injection fencing.</li>
+              <li><strong>Enterprise Format Plugins &amp; OCR Fallback</strong>: Drop-in <code>BaseExtractor</code> plugins for <code>.xlsx</code>, <code>.html</code>, and <code>.json</code>, plus optional OCR fallback for scanned PDFs.</li>
+              <li><strong>Document Security Guardrails</strong>: Magic-byte + OOXML/text verification, file size limits, and XML prompt injection fencing.</li>
               <li><strong>Authentication &amp; Multi-Tenancy</strong>: JWT authentication with per-user database isolation (<code>user_id</code>).</li>
               <li><strong>Cross-Lingual Support</strong>: Multilingual querying and evaluation (Urdu/Arabic/English).</li>
               <li><strong>Observability</strong>: Langfuse span tracing for latency, token usage, and cost profiling.</li>
@@ -702,67 +732,122 @@
 
       <!-- Section 3 -->
       <section id="sec-3">
-        <h2 class="section-title"><span class="sec-num">3</span> Text Extraction &amp; Chunking Strategy</h2>
+        <h2 class="section-title"><span class="sec-num">3</span> Universal Text Extraction &amp; Chunking Strategy</h2>
 
-        <h3>Text Extraction Pipeline</h3>
+        <h3>Format-Agnostic Pluggable Extraction Architecture</h3>
+        <p>
+          Because production corpora can span unstructured prose, slide decks, structured tables, and plain-text notes, ingestion is decoupled behind a unified <code>BaseExtractor</code> interface and an <code>ExtractorRegistry</code>. Every format adapter emits a canonical <code>ExtractedDocument</code> containing ordered <code>ExtractedBlock</code> units (<code>text</code>, <code>table</code>, <code>heading</code>, <code>slide_notes</code>, or <code>csv_rows</code>) with normalized provenance metadata. Downstream chunking, embedding, indexing, and retrieval operate purely on this intermediate representation—so adding a new file type (e.g., <code>.xlsx</code>, <code>.html</code>, <code>.json</code>) requires only registering a new extractor plugin with zero pipeline refactoring.
+        </p>
+
         <div class="code-wrap">
-          <div class="code-header"><span>Pipeline Flow</span></div>
-          <pre><code>  [ Incoming Document ]
+          <div class="code-header"><span>Pluggable Multi-Format Extraction Flow</span></div>
+          <pre><code>  [ Incoming Document (Any Supported Corpus File) ]
            │
-           ├──► PDF Parsing ──────► PyMuPDF (Text &amp; Layout) + pdfplumber (Tables to MD)
+           ▼
+  [ Validator: Extension + Magic Bytes / OOXML / UTF-8 Sniff + Size &lt;= 20MB + SHA-256 ]
            │
-           ├──► DOCX Parsing ─────► python-docx (Heading Hierarchy &amp; Tables to MD)
+           ▼
+  [ ExtractorRegistry (Strategy Router by Normalized File Type) ]
+           ├──► .pdf  ──► PDFExtractor      (PyMuPDF text/layout + pdfplumber Markdown tables)
+           ├──► .docx ──► DocxExtractor     (python-docx reading-order headings &amp; MD tables)
+           ├──► .txt  ──► TextExtractor     (UTF-8 fast path + chardet fallback, BOM/CRLF clean)
+           ├──► .md   ──► MarkdownExtractor (Heading hierarchy tree, code blocks &amp; MD tables)
+           ├──► .pptx ──► PptxExtractor     (python-pptx slide titles, frames, tables &amp; notes)
+           └──► .csv  ──► CsvExtractor      (Encoding/delimiter sniff + header-preserved rows)
            │
-           └──► Extended Formats ─► TXT/MD (UTF-8/chardet) | PPTX (python-pptx Slides/Notes)</code></pre>
+           ▼
+  [ Canonical ExtractedDocument { blocks[], unit_type, metadata } ]
+           │
+           ▼
+  [ Format-Aware Chunker (Recursive Narrative Split + Header-Repeated Table/CSV Batching) ]</code></pre>
         </div>
 
-        <ul>
-          <li>
-            <strong>PDF Extraction</strong>:
-            <ul>
-              <li>Primary text extraction using <code>PyMuPDF</code> (<code>fitz</code>) preserves layout information and exact page numbers.</li>
-              <li>Table detection using <code>pdfplumber</code> serializes structured table regions into Markdown formatted tables (e.g., <code>| Header 1 | Header 2 |</code>) so LLMs retain column/row relationships.</li>
-              <li>Header and footer repetition removal based on vertical coordinate thresholds.</li>
-              <li>Scanned/image-only PDF detection: Pages yielding fewer than an average of 20 characters per page trigger an immediate extraction failure (<code>400 Bad Request</code> with an explicit message indicating OCR requirements).</li>
-            </ul>
-          </li>
-          <li>
-            <strong>DOCX Extraction</strong>:
-            <ul>
-              <li>Iterates sequentially through document elements (paragraphs and tables) to maintain reading order.</li>
-              <li>Extracts document structure (<code>Heading 1</code>, <code>Heading 2</code>) and maps it to <code>section_title</code> chunk metadata.</li>
-              <li>Converts embedded XML tables into formatted Markdown tables.</li>
-            </ul>
-          </li>
-          <li>
-            <strong>Extended File Formats</strong>:
-            <ul>
-              <li><code>.txt</code> / <code>.md</code>: Pure text extraction using <code>chardet</code> encoding fallback detection. Markdown headers are parsed to inform chunk boundary splits.</li>
-              <li><code>.pptx</code>: Extracted via <code>python-pptx</code>, capturing slide titles, text frames, tables, and speaker notes with slide number metadata.</li>
-            </ul>
-          </li>
-        </ul>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Format</th>
+                <th>Extraction Engine</th>
+                <th>Structure &amp; Provenance Preserved</th>
+                <th>Edge-Case Guardrails</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>PDF (<code>.pdf</code>)</strong></td>
+                <td><code>PyMuPDF</code> (<code>fitz</code>) + <code>pdfplumber</code></td>
+                <td>Layout reading order, exact <code>page_number</code>, Markdown-serialized tables, coordinate-based header/footer removal.</td>
+                <td>Scanned/image-only check: &lt; 20 chars/page triggers <code>400 Bad Request</code> indicating OCR is required.</td>
+              </tr>
+              <tr>
+                <td><strong>Word (<code>.docx</code>)</strong></td>
+                <td><code>python-docx</code></td>
+                <td>Sequential paragraph + table iteration in reading order; <code>Heading 1/2/3</code> mapped to <code>section_title</code>; XML tables &rarr; Markdown.</td>
+                <td>ZIP/OOXML signature verification (<code>word/document.xml</code>) prevents spoofed archives (<code>415</code>).</td>
+              </tr>
+              <tr>
+                <td><strong>Plain Text (<code>.txt</code>)</strong></td>
+                <td>UTF-8 + <code>chardet</code></td>
+                <td>Paragraph breaks (<code>\n\n</code>), BOM stripping, CRLF normalization, line-range metadata in <code>JSONB</code>.</td>
+                <td>Null-byte &amp; binary-ratio check rejects disguised binaries (<code>415</code>); empty/whitespace-only files return <code>400</code>.</td>
+              </tr>
+              <tr>
+                <td><strong>Markdown (<code>.md</code>)</strong></td>
+                <td>Heading-tree parser + <code>chardet</code></td>
+                <td>Breadcrumb heading hierarchy (<code># &gt; ## &gt; ###</code>) mapped to <code>section_title</code>; fenced code blocks and MD tables kept intact.</td>
+                <td>Preserves code fences and Markdown tables without splitting mid-syntax; rejects binary payloads (<code>415</code>).</td>
+              </tr>
+              <tr>
+                <td><strong>PowerPoint (<code>.pptx</code>)</strong></td>
+                <td><code>python-pptx</code></td>
+                <td>Slide titles &rarr; <code>section_title</code>, body text frames, embedded slide tables (&rarr; Markdown), and speaker notes with <code>slide_number</code> mapped to <code>page_number</code>.</td>
+                <td>ZIP/OOXML check (<code>ppt/presentation.xml</code>); skips empty/image-only slides cleanly and errors if deck has zero extractable text (<code>400</code>).</td>
+              </tr>
+              <tr>
+                <td><strong>CSV (<code>.csv</code>)</strong></td>
+                <td>Python <code>csv</code> + <code>chardet</code> / <code>csv.Sniffer</code></td>
+                <td>Auto-detects encoding and delimiter (<code>,</code>, <code>;</code>, <code>\t</code>, <code>|</code>); strips empty rows; emits header-repeated Markdown tables (or <code>Col: Val</code> record blocks for wide tables) with <code>row_start</code>–<code>row_end</code> metadata.</td>
+                <td>Rejects binary files (<code>415</code>), empty or header-only CSVs (<code>400</code>), and handles ragged rows/quoted multiline cells safely.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
         <h3>Chunking Strategy &amp; Configuration Design</h3>
 
-        <h4>Structure-Aware Recursive Token Chunking</h4>
-        <p>Documents are partitioned using a structure-aware recursive splitting strategy. Splitting occurs along logical boundaries in priority order:</p>
+        <h4>Format-Aware Recursive &amp; Tabular Chunking</h4>
+        <p>Documents are partitioned using a unified chunking engine that adapts to the block type emitted by the extractor:</p>
         <ol>
-          <li>Markdown Headings (<code>#</code>, <code>##</code>, <code>###</code>)</li>
-          <li>Paragraph double newlines (<code>\n\n</code>)</li>
-          <li>Sentence terminations (<code>.</code>, <code>?</code>, <code>!</code>)</li>
-          <li>Character-level token fallbacks (<code>tiktoken</code> <code>cl100k_base</code> tokenizer boundary alignment)</li>
+          <li><strong>Narrative &amp; Structured Prose (<code>.pdf</code>, <code>.docx</code>, <code>.txt</code>, <code>.md</code>, <code>.pptx</code>)</strong>: Recursive token splitting along logical boundaries in priority order:
+            <ol>
+              <li>Markdown / Document Headings (<code>#</code>, <code>##</code>, <code>###</code>) &amp; Slide Boundaries</li>
+              <li>Paragraph double newlines (<code>\n\n</code>)</li>
+              <li>Sentence terminations (<code>.</code>, <code>?</code>, <code>!</code>)</li>
+              <li>Token-aligned fallback (<code>tiktoken</code> <code>cl100k_base</code> tokenizer boundary alignment)</li>
+            </ol>
+          </li>
+          <li><strong>Tables &amp; CSV Datasets (<code>.csv</code>, PDF/DOCX/PPTX/MD Tables)</strong>: Small tables are preserved as single atomic units whenever they fit within the token budget. Large CSV files and multi-page tables are split along <strong>row boundaries with automatic header repetition</strong> at the top of every chunk (plus row-range metadata like <code>Rows 1–25</code>), ensuring no numeric cell is ever orphaned from its column schema. For ultra-wide CSVs (&gt; 12 columns), rows are serialized as compact <code>Column: Value</code> key-value records so embeddings capture semantic field relationships cleanly.</li>
         </ol>
-        <p>Tables are preserved as single atomic units whenever they fit within the maximum token budget.</p>
 
         <h4>Contextual Header Injection</h4>
-        <p>To maintain semantic context across chunk boundaries, every chunk is prefixed with contextual metadata headers prior to vector embedding generation:</p>
+        <p>To maintain semantic context across chunk boundaries across any file format, every chunk is prefixed with a normalized contextual metadata header prior to vector embedding generation:</p>
         <div class="code-wrap">
-          <div class="code-header"><span>Contextual Chunk Example</span></div>
-          <pre><code>[Document: quarterly_report.pdf | Section: Financial Results | Page: 12]
-Operating margin increased by 4.2% compared to the previous fiscal quarter...</code></pre>
+          <div class="code-header"><span>Contextual Chunk Examples (Prose, Slides &amp; CSV)</span></div>
+          <pre><code># Narrative Document (PDF / DOCX / MD / TXT)
+[Document: quarterly_report.pdf | Section: Financial Results | Page: 12]
+Operating margin increased by 4.2% compared to the previous fiscal quarter...
+
+# Presentation Deck (PPTX)
+[Document: product_roadmap.pptx | Section: Q3 Architecture Goals | Slide: 6]
+Key milestone: migrate vector index to HNSW with 1024-dim Cohere embeddings...
+
+# Structured Tabular Dataset (CSV)
+[Document: regional_sales_2025.csv | Section: Rows 1-25 | Columns: Region, Product, Revenue_USD, Margin_Pct]
+| Region | Product | Revenue_USD | Margin_Pct |
+| --- | --- | --- | --- |
+| EMEA | Enterprise RAG | 420000 | 68.4% |</code></pre>
         </div>
-        <p>This prevents loss of context when chunks contain ambiguous pronouns or isolated data points.</p>
+        <p>This prevents loss of context when chunks contain ambiguous pronouns, isolated slide bullets, or raw tabular rows.</p>
 
         <h4>Experimental Evaluation Matrix (Config A vs Config B)</h4>
         <div class="grid-2">
@@ -782,8 +867,8 @@ Operating margin increased by 4.2% compared to the previous fiscal quarter...</c
               <li><strong>Chunk Size</strong>: 400 tokens (testing 300–500 range)</li>
               <li><strong>Chunk Overlap</strong>: 60 tokens (15%)</li>
               <li><strong>Search Mode</strong>: Contextual Header Injection + Hybrid Search (Dense HNSW <code>pgvector</code> + Sparse <code>tsvector</code> fused via RRF <em>k = 60</em>; candidate pool = 20)</li>
-              <li><strong>Distance Metric</strong>: Cosine similarity + Cross-Encoder Reranking</li>
-              <li><strong>Reranking</strong>: <code>rerank-v5.0-fast</code> filtering candidate pool down to <code>top_k=5</code></li>
+              <li><strong>Reranking &amp; Threshold Gate</strong>: <code>rerank-v5.0-fast</code> filtering Top-20 &rarr; <code>top_k=5</code>; refusal gated on calibrated <code>rerank_score</code> threshold (tuned on unanswerable golden queries—never applied to raw RRF scores ~<code>0.016–0.033</code>)</li>
+              <li><strong>Inspector Transparency</strong>: Return both dense <code>similarity_score</code> and <code>rerank_score</code> in <code>/api/v1/ask</code></li>
             </ul>
           </div>
         </div>
@@ -834,9 +919,9 @@ CREATE TABLE documents (
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     filename TEXT NOT NULL,
     file_hash CHAR(64) NOT NULL,
-    file_type TEXT NOT NULL,
+    file_type TEXT NOT NULL,              -- Normalized format: pdf | docx | txt | md | pptx | csv
     file_size_bytes BIGINT NOT NULL,
-    page_count INT DEFAULT 1,
+    page_count INT DEFAULT 1,             -- Pages (PDF), slides (PPTX), row batches (CSV), or 1
     chunk_count INT DEFAULT 0,
     status TEXT NOT NULL DEFAULT 'processing',
     created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -849,13 +934,13 @@ CREATE TABLE chunks (
     document_id UUID NOT NULL REFERENCES documents(id) ON DELETE CASCADE,
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     chunk_index INT NOT NULL,
-    page_number INT DEFAULT 1,
-    section_title TEXT,
+    page_number INT DEFAULT 1,            -- Page (PDF), slide (PPTX), batch index (CSV), or 1
+    section_title TEXT,                   -- Heading breadcrumb, slide title, or CSV row range
     content TEXT NOT NULL,
     token_count INT NOT NULL,
-    embedding vector(1024),
+    embedding vector(1024),               -- Must pass output_dimension=1024 to embed-v4.0 (API default is 1536)
     tsv tsvector GENERATED ALWAYS AS (to_tsvector('simple', content)) STORED,
-    metadata JSONB NOT NULL DEFAULT '{}'::jsonb
+    metadata JSONB NOT NULL DEFAULT '{}'::jsonb  -- Format provenance: unit_type, row_start/end, columns
 );
 
 -- Index Design for Vector, Text, and Relational Queries
@@ -910,11 +995,18 @@ CREATE INDEX idx_documents_user_id ON documents (user_id);</code></pre>
 │   │   │   └── models.py         # SQLAlchemy 2.0 ORM Mappings for Users, Documents, Chunks
 │   │   ├── ingestion/
 │   │   │   ├── __init__.py
-│   │   │   ├── validator.py      # File extension, size, magic byte verification, SHA-256 hash
-│   │   │   ├── extractors.py     # PDF, DOCX, TXT, MD, PPTX text extraction engines
-│   │   │   ├── chunker.py        # Structure-aware recursive splitting &amp; header injection
+│   │   │   ├── validator.py      # Extension allowlist, size cap, magic/OOXML/UTF-8 sniff, SHA-256
+│   │   │   ├── extractors/       # Pluggable format-agnostic extraction adapters
+│   │   │   │   ├── __init__.py   # ExtractorRegistry routing file_type -&gt; BaseExtractor
+│   │   │   │   ├── base.py       # BaseExtractor ABC, ExtractedDocument &amp; ExtractedBlock models
+│   │   │   │   ├── pdf.py        # PyMuPDF text/layout + pdfplumber Markdown tables
+│   │   │   │   ├── docx.py       # python-docx reading-order paragraphs, headings &amp; tables
+│   │   │   │   ├── text_md.py    # TXT (chardet) &amp; Markdown heading-tree extractor
+│   │   │   │   ├── pptx.py       # python-pptx slide titles, frames, tables &amp; speaker notes
+│   │   │   │   └── csv_extractor.py # CSV encoding/delimiter sniffer &amp; header-preserved rows
+│   │   │   ├── chunker.py        # Format-aware recursive splitter, table/CSV row-batching &amp; headers
 │   │   │   ├── embedder.py       # Batched async embedding calls with retry handling
-│   │   │   └── pipeline.py       # Ingestion orchestrator executing in DB transactions
+│   │   │   └── pipeline.py       # Format-agnostic ingestion orchestrator in DB transactions
 │   │   └── api/
 │   │       ├── __init__.py
 │   │       └── v1/
@@ -970,14 +1062,14 @@ CREATE INDEX idx_documents_user_id ON documents (user_id);</code></pre>
           <div class="endpoint-head">
             <span class="badge b-method">POST</span>
             <code>/api/v1/documents</code>
-            <strong>Upload Document</strong> (<code>multipart/form-data</code>)
+            <strong>Upload Document</strong> (<code>multipart/form-data</code> &middot; <code>.pdf</code>, <code>.docx</code>, <code>.txt</code>, <code>.md</code>, <code>.pptx</code>, <code>.csv</code>)
           </div>
           <ul style="margin-bottom: 0;">
-            <li><span class="badge b-2xx">201 Created</span> Returns document details, generated chunk count, and total processing latency.</li>
-            <li><span class="badge b-4xx">400 Bad Request</span> Scanned PDF containing no text, corrupted file format, or empty payload.</li>
+            <li><span class="badge b-2xx">201 Created</span> Returns document details, normalized <code>file_type</code>, generated chunk count, and total processing latency.</li>
+            <li><span class="badge b-4xx">400 Bad Request</span> Scanned PDF containing no text, empty/header-only CSV, corrupted archive, or empty payload.</li>
             <li><span class="badge b-4xx">409 Conflict</span> Duplicate document detected based on matching <code>SHA-256</code> content hash.</li>
             <li><span class="badge b-4xx">413 Payload Too Large</span> Upload exceeds maximum allowed size (e.g., &gt; 20 MB).</li>
-            <li><span class="badge b-4xx">415 Unsupported Media Type</span> Invalid file extension or mismatched file magic bytes.</li>
+            <li><span class="badge b-4xx">415 Unsupported Media Type</span> Disallowed extension, mismatched magic bytes / OOXML signature, or binary payload disguised as <code>.txt</code>/<code>.md</code>/<code>.csv</code>.</li>
           </ul>
         </div>
 
@@ -1090,6 +1182,12 @@ CREATE INDEX idx_documents_user_id ON documents (user_id);</code></pre>
               <li><em>Heuristic Assessment</em>: Flags inputs attempting structural manipulation before routing to retrieval.</li>
             </ul>
           </li>
+          <li>
+            <strong>Off-Topic Request Handling</strong>:
+            <ul>
+              <li>Queries outside the uploaded corpus are gated by the retrieval relevance threshold (<code>cosine_similarity &lt; 0.35</code> in Config A; calibrated <code>rerank_score</code> threshold in Config B) and enforced by the strict LLM refusal policy, returning <code>refused: true</code> without hallucinating from pre-trained knowledge.</li>
+            </ul>
+          </li>
         </ol>
 
         <h3>Document Fencing Guardrail</h3>
@@ -1160,10 +1258,10 @@ CRITICAL OPERATIONAL RULES:
             <tbody>
               <tr>
                 <td><strong>1</strong></td>
-                <td><strong>Scanned / Image-Only PDF</strong></td>
-                <td><code>PyMuPDF</code> character density check returns &lt; 20 chars/page.</td>
-                <td><span class="badge b-4xx">400 Bad Request</span><br />"PDF lacks extractable text."</td>
-                <td>Upload a scanned document; verify API returns <code>400</code> error message.</td>
+                <td><strong>Scanned PDF / Empty File / Header-Only CSV</strong></td>
+                <td><code>PyMuPDF</code> density &lt; 20 chars/page, empty text body, or CSV with 0 data rows.</td>
+                <td><span class="badge b-4xx">400 Bad Request</span><br />"Document lacks extractable text or data rows."</td>
+                <td>Upload scanned PDF &amp; header-only CSV; verify API returns <code>400</code> error message.</td>
               </tr>
               <tr>
                 <td><strong>2</strong></td>
@@ -1188,10 +1286,10 @@ CRITICAL OPERATIONAL RULES:
               </tr>
               <tr>
                 <td><strong>5</strong></td>
-                <td><strong>Unanswerable Question</strong></td>
-                <td>Max similarity score &lt; threshold (e.g. <code>0.35</code>) or LLM refusal.</td>
+                <td><strong>Unanswerable / Off-Topic Question</strong></td>
+                <td><code>cosine_similarity &lt; 0.35</code> (Config A), calibrated <code>rerank_score</code> below gate (Config B), or LLM refusal.</td>
                 <td><span class="badge b-2xx">200 OK</span> <code>refused: true</code><br />"I cannot find sufficient evidence..."</td>
-                <td>Ask query unrelated to uploaded documents; verify system refusal.</td>
+                <td>Ask off-topic query unrelated to uploaded documents; verify system refusal.</td>
               </tr>
               <tr>
                 <td><strong>6</strong></td>
@@ -1209,17 +1307,17 @@ CRITICAL OPERATIONAL RULES:
               </tr>
               <tr>
                 <td><strong>8</strong></td>
-                <td><strong>Special Formatting / Languages</strong></td>
-                <td><code>pdfplumber</code> Markdown tables; PostgreSQL <code>'simple'</code> text search parser.</td>
-                <td><span class="badge b-2xx">200 OK</span><br />Structured Markdown table output and accurate non-English processing.</td>
-                <td>Upload document containing financial tables; verify Markdown table preservation.</td>
+                <td><strong>Tables, CSVs, Slides &amp; Languages</strong></td>
+                <td><code>pdfplumber</code>/<code>docx</code>/<code>pptx</code> MD tables; CSV header-repeated row batching; Postgres <code>'simple'</code> parser.</td>
+                <td><span class="badge b-2xx">200 OK</span><br />Structured Markdown table preservation and accurate multilingual retrieval.</td>
+                <td>Upload PDF tables, multi-row CSV, PPTX slides, and non-English queries; verify exact value retrieval.</td>
               </tr>
               <tr>
                 <td><strong>9</strong></td>
                 <td><strong>API Timeout or Rate Limit</strong></td>
-                <td>Catch <code>httpx.TimeoutException</code> or HTTP <code>429</code> from external service.</td>
-                <td>Retry 3x via <code>tenacity</code>; return <span class="badge b-5xx">503 Service Unavailable</span> on failure.</td>
-                <td>Simulate API outage; confirm retry behavior and controlled <code>503</code> failure.</td>
+                <td>Catch <code>httpx.TimeoutException</code> or HTTP <code>429</code> from external service; roll back uncommitted ingestion txn.</td>
+                <td>Retry 3x via <code>tenacity</code>; roll back DB row so retry isn't blocked by <code>409</code>; return <span class="badge b-5xx">503 Service Unavailable</span>.</td>
+                <td>Simulate API outage during upload &amp; query; confirm retries, clean rollback, and <code>503</code> failure.</td>
               </tr>
               <tr>
                 <td><strong>10</strong></td>
@@ -1231,9 +1329,9 @@ CRITICAL OPERATIONAL RULES:
               <tr>
                 <td><strong>11</strong></td>
                 <td><strong>Spoofed / Mismatched File</strong></td>
-                <td><code>python-magic</code> signature check detects mismatch between extension and bytes.</td>
+                <td><code>python-magic</code> + OOXML check for <code>.pdf</code>/<code>.docx</code>/<code>.pptx</code>; null-byte &amp; UTF-8/CSV sniff for text formats.</td>
                 <td><span class="badge b-4xx">415 Unsupported Media Type</span><br />"File content signature mismatch."</td>
-                <td>Rename <code>.exe</code> file to <code>.pdf</code>; upload and verify magic-byte validation failure.</td>
+                <td>Rename <code>.exe</code> to <code>.pdf</code> and to <code>.csv</code>; verify both fail validation with <code>415</code>.</td>
               </tr>
               <tr>
                 <td><strong>12</strong></td>
@@ -1288,8 +1386,8 @@ CRITICAL OPERATIONAL RULES:
         <div class="milestone">
           <h4>Milestone 1 — Repository Architecture &amp; Corpus Curation</h4>
           <ul>
-            <li>Initialize Git repository, <code>.gitignore</code>, <code>.env.example</code>, and pinned <code>requirements.txt</code>.</li>
-            <li>Assemble a validation corpus consisting of 6–8 diverse PDF &amp; DOCX documents (including tables and one intentional contradiction pair).</li>
+            <li>Initialize Git repository, <code>.gitignore</code>, <code>.env.example</code>, and lock exact pinned versions (<code>==</code>) in <code>requirements.txt</code> after <code>.venv</code> installation.</li>
+            <li>Assemble a diverse multi-format validation corpus (8–10 files) spanning <code>.pdf</code>, <code>.docx</code>, <code>.txt</code>, <code>.md</code>, <code>.pptx</code>, and <code>.csv</code> (including structured tables, slide decks, tabular CSV data, and one intentional contradiction pair).</li>
           </ul>
         </div>
 
@@ -1305,16 +1403,16 @@ CRITICAL OPERATIONAL RULES:
           <h4>Milestone 3 — Pipeline Prototyping via Notebooks</h4>
           <ul>
             <li>Construct and execute validation notebooks (<code>01_extraction_chunking.ipynb</code>, <code>02_embeddings_retrieval.ipynb</code>, <code>03_generation_eval_prototype.ipynb</code>).</li>
-            <li>Validate extraction accuracy, token chunk distribution, vector indexing, and baseline LLM generation response formats.</li>
+            <li>Validate multi-format extraction (<code>PDF</code>, <code>DOCX</code>, <code>TXT</code>, <code>MD</code>, <code>PPTX</code>, <code>CSV</code>), token/row-batch chunk distribution, vector indexing, and baseline LLM generation response formats.</li>
           </ul>
         </div>
 
         <div class="milestone">
-          <h4>Milestone 4 — Async Ingestion Pipeline Construction</h4>
+          <h4>Milestone 4 — Universal Async Ingestion Pipeline Construction</h4>
           <ul>
-            <li>Implement validation logic (<code>filetype</code> checks, SHA-256 calculation).</li>
-            <li>Build PDF/DOCX extractors, structure-aware recursive chunker, and batch embedder.</li>
-            <li>Construct transactional ingestion pipeline committing metadata and vector chunks to Postgres.</li>
+            <li>Implement format-aware validation logic (extension allowlist, magic-byte/OOXML &amp; UTF-8/CSV sniff checks, size cap, SHA-256 hash).</li>
+            <li>Build the pluggable <code>BaseExtractor</code> + <code>ExtractorRegistry</code> with adapters for <code>.pdf</code>, <code>.docx</code>, <code>.txt</code>, <code>.md</code>, <code>.pptx</code>, and <code>.csv</code>, format-aware recursive &amp; header-repeated tabular chunker, and batch embedder (explicitly passing <code>output_dimension=1024</code> to Cohere <code>embed-v4.0</code>).</li>
+            <li>Construct format-agnostic transactional ingestion pipeline committing metadata and vector chunks to Postgres—rolling back cleanly on embedding/DB failure so <code>UNIQUE(user_id, file_hash)</code> never locks out retries.</li>
           </ul>
         </div>
 
@@ -1373,6 +1471,11 @@ CRITICAL OPERATIONAL RULES:
                   <td>Ratio of queries where target context appears in top <em>k</em> results.</td>
                 </tr>
                 <tr>
+                  <td><strong>Recall@k (k=5)</strong></td>
+                  <td><code>&ge; 0.80</code></td>
+                  <td>Fraction of all required ground-truth source chunks retrieved in top <em>k</em> (key for multi-chunk questions).</td>
+                </tr>
+                <tr>
                   <td><strong>MRR (Mean Reciprocal Rank)</strong></td>
                   <td><code>&ge; 0.75</code></td>
                   <td>Reciprocal rank measure of the first relevant retrieved chunk.</td>
@@ -1397,14 +1500,18 @@ CRITICAL OPERATIONAL RULES:
           </div>
 
           <ul>
-            <li>Generate structured benchmark report and capture results within <code>EVAL.md</code>.</li>
+            <li>Validate LLM-as-a-judge reliability: run RAGAS judge at <code>temperature=0</code> for repeatability and spot-check 5–10 manually graded golden items against automated scores; document agreement and failure analysis in <code>EVAL.md</code>.</li>
+            <li>Report multilingual evaluation subset metrics (e.g., Urdu/Arabic queries over English documents) separately in <code>EVAL.md</code>.</li>
           </ul>
         </div>
 
         <div class="milestone">
-          <h4>Milestone 10 — Core Documentation Completion</h4>
+          <h4>Milestone 10 — Documentation, Submission Artifacts &amp; Demo Video</h4>
           <ul>
-            <li>Complete core system documentation files (<code>README.md</code>, <code>DESIGN.md</code>, <code>EVAL.md</code>).</li>
+            <li>Complete core system documentation files (<code>README.md</code>, <code>DESIGN.md</code>, <code>EVAL.md</code>) and verify pinned <code>requirements.txt</code> + <code>.env.example</code>.</li>
+            <li>Capture Swagger UI (<code>/docs</code>) screenshots of successful API tests (upload, list, ask, delete, error handling).</li>
+            <li>Compile AI usage transparency documentation (prompts, chat history, tools/models, and configuration).</li>
+            <li>Record mandatory Project Demo Video covering corpus intro, architecture walkthrough, design justifications, upload/Q&amp;A/citations/chunk scores, refusal, delete verification, live guardrail proofs, error codes, edge cases, evaluation walkthrough, <code>pytest</code> run, Swagger UI, and bonus features.</li>
           </ul>
         </div>
 
@@ -1421,8 +1528,8 @@ CRITICAL OPERATIONAL RULES:
             <p style="margin-bottom: 0;">Verify handling across all 12 defined edge cases; confirm systematic error responses and automated test coverage.</p>
           </div>
           <div class="card">
-            <h4>Extended Document Format Parsing</h4>
-            <p style="margin-bottom: 0;">Extend <code>ingestion/extractors.py</code> with support for <code>.txt</code>, <code>.md</code>, and <code>.pptx</code> (via <code>python-pptx</code>) file formats.</p>
+            <h4>Enterprise Format Plugins &amp; OCR Fallback</h4>
+            <p style="margin-bottom: 0;">Register drop-in <code>BaseExtractor</code> plugins under <code>ingestion/extractors/</code> for <code>.xlsx</code>, <code>.html</code>, and <code>.json</code>, plus optional OCR fallback for scanned image PDFs—with zero changes to chunking, indexing, or retrieval.</p>
           </div>
           <div class="card">
             <h4>Advanced Document Guardrails</h4>

@@ -1,0 +1,37 @@
+Region,Quarter,Product,Revenue_USD,Units_Sold,Margin_Pct
+North America,Q1-2025,Enterprise RAG,218700,15,68.5%
+North America,Q1-2025,Vector Search Pro,115425,34,72.0%
+North America,Q1-2025,Guardrail Shield,77760,49,76.2%
+North America,Q2-2025,Enterprise RAG,243000,16,68.5%
+North America,Q2-2025,Vector Search Pro,128250,38,72.0%
+North America,Q2-2025,Guardrail Shield,86400,54,76.2%
+North America,Q3-2025,Enterprise RAG,262440,17,68.5%
+North America,Q3-2025,Vector Search Pro,138510,41,72.0%
+North America,Q3-2025,Guardrail Shield,93312,58,76.2%
+North America,Q4-2025,Enterprise RAG,296460,20,69.7%
+North America,Q4-2025,Vector Search Pro,156465,46,73.2%
+North America,Q4-2025,Guardrail Shield,105408,66,77.4%
+EMEA,Q1-2025,Enterprise RAG,162000,11,68.5%
+EMEA,Q1-2025,Vector Search Pro,85500,25,72.0%
+EMEA,Q1-2025,Guardrail Shield,57600,36,76.2%
+EMEA,Q2-2025,Enterprise RAG,180000,12,68.5%
+EMEA,Q2-2025,Vector Search Pro,95000,28,72.0%
+EMEA,Q2-2025,Guardrail Shield,64000,40,76.2%
+EMEA,Q3-2025,Enterprise RAG,194400,13,68.5%
+EMEA,Q3-2025,Vector Search Pro,102600,30,72.0%
+EMEA,Q3-2025,Guardrail Shield,69120,43,76.2%
+EMEA,Q4-2025,Enterprise RAG,219600,15,69.7%
+EMEA,Q4-2025,Vector Search Pro,115900,34,73.2%
+EMEA,Q4-2025,Guardrail Shield,78080,49,77.4%
+APAC,Q1-2025,Enterprise RAG,137700,9,68.5%
+APAC,Q1-2025,Vector Search Pro,72675,21,72.0%
+APAC,Q1-2025,Guardrail Shield,48960,31,76.2%
+APAC,Q2-2025,Enterprise RAG,153000,10,68.5%
+APAC,Q2-2025,Vector Search Pro,80750,24,72.0%
+APAC,Q2-2025,Guardrail Shield,54400,34,76.2%
+APAC,Q3-2025,Enterprise RAG,165240,11,68.5%
+APAC,Q3-2025,Vector Search Pro,87210,26,72.0%
+APAC,Q3-2025,Guardrail Shield,58752,37,76.2%
+APAC,Q4-2025,Enterprise RAG,186660,12,69.7%
+APAC,Q4-2025,Vector Search Pro,98515,29,73.2%
+APAC,Q4-2025,Guardrail Shield,66368,41,77.4%

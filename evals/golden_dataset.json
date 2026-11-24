@@ -1,0 +1,281 @@
+[
+  {
+    "id": "q01",
+    "category": "factual",
+    "language": "en",
+    "question": "How many days of paid annual leave are full-time employees entitled to per calendar year under HR-POL-2026?",
+    "answerable": true,
+    "expected_sources": [{"filename": "01_company_hr_policy.pdf", "page_number": 1}],
+    "reference_answer": "Full-time employees are entitled to 22 days of paid annual leave per calendar year, with up to 5 unused days allowed to carry over into Q1 of the next year."
+  },
+  {
+    "id": "q02",
+    "category": "factual",
+    "language": "en",
+    "question": "How many weeks of paid parental leave do primary and secondary caregivers receive?",
+    "answerable": true,
+    "expected_sources": [{"filename": "01_company_hr_policy.pdf", "page_number": 1}],
+    "reference_answer": "Primary caregivers receive 16 weeks of 100% paid parental leave, and secondary caregivers receive 6 weeks of 100% paid parental leave."
+  },
+  {
+    "id": "q03",
+    "category": "tabular",
+    "language": "en",
+    "question": "What is the annual Learning & Development stipend cap and what expense code must be used in Expensify?",
+    "answerable": true,
+    "expected_sources": [{"filename": "01_company_hr_policy.pdf", "page_number": 2}],
+    "reference_answer": "The annual Learning & Development stipend is USD 2,400 (requires Direct Manager approval), and receipts must be submitted within 30 days using expense code ACME-EXP-2026 in Expensify."
+  },
+  {
+    "id": "q04",
+    "category": "tabular",
+    "language": "en",
+    "question": "Which expense categories in the reimbursement matrix are auto-approved and what are their annual caps?",
+    "answerable": true,
+    "expected_sources": [{"filename": "01_company_hr_policy.pdf", "page_number": 2}],
+    "reference_answer": "Home Internet Allowance (USD 900) and Wellness & Gym Stipend (USD 1,200) are auto-approved."
+  },
+  {
+    "id": "q05",
+    "category": "tabular",
+    "language": "en",
+    "question": "What are the monthly uptime SLO and P95 latency budget for Tier-1 customer-facing APIs?",
+    "answerable": true,
+    "expected_sources": [{"filename": "02_engineering_handbook.pdf", "page_number": 1}],
+    "reference_answer": "Tier-1 APIs must maintain 99.95% monthly uptime, a maximum 0.10% error rate, and a 1,800 ms P95 latency budget (with database vector retrieval capped at 120 ms at P95)."
+  },
+  {
+    "id": "q06",
+    "category": "factual",
+    "language": "en",
+    "question": "What triggers an automated canary rollback in production and how fast must it revert?",
+    "answerable": true,
+    "expected_sources": [{"filename": "02_engineering_handbook.pdf", "page_number": 2}],
+    "reference_answer": "If HTTP 5xx error rates exceed 1.0% for 3 consecutive minutes during a 10% canary rollout, automated rollback reverts to the previous container digest within 90 seconds."
+  },
+  {
+    "id": "q07",
+    "category": "contradiction",
+    "language": "en",
+    "question": "How many days per week are hybrid engineering employees required to work in the office?",
+    "answerable": true,
+    "expected_sources": [
+      {"filename": "03_remote_work_policy_2025.docx", "page_number": 1},
+      {"filename": "04_remote_work_addendum_2026.docx", "page_number": 1}
+    ],
+    "reference_answer": "There is a conflict between documents: Policy RW-2025 requires 3 days/week in-office (Tuesday-Thursday), whereas Addendum RW-2026 updates the requirement to 2 days/week (Tuesday and Wednesday)."
+  },
+  {
+    "id": "q08",
+    "category": "contradiction",
+    "language": "en",
+    "question": "What is the one-time home office equipment stipend amount for employees?",
+    "answerable": true,
+    "expected_sources": [
+      {"filename": "03_remote_work_policy_2025.docx", "page_number": 1},
+      {"filename": "04_remote_work_addendum_2026.docx", "page_number": 1}
+    ],
+    "reference_answer": "Policy RW-2025 specifies a USD 1,000 one-time home office stipend, while Addendum RW-2026 increases it to USD 1,500 effective March 2026."
+  },
+  {
+    "id": "q09",
+    "category": "factual",
+    "language": "en",
+    "question": "What are the core collaboration hours under the 2025 Remote Work Policy?",
+    "answerable": true,
+    "expected_sources": [{"filename": "03_remote_work_policy_2025.docx", "page_number": 1}],
+    "reference_answer": "Core collaboration hours are 10:00 AM to 4:00 PM local time."
+  },
+  {
+    "id": "q10",
+    "category": "tabular",
+    "language": "en",
+    "question": "What is the acknowledgement SLA and update cadence for a SEV-2 incident in the Incident Response Runbook?",
+    "answerable": true,
+    "expected_sources": [{"filename": "05_incident_runbook.md", "page_number": 1}],
+    "reference_answer": "SEV-2 incidents have a 30-minute acknowledgement SLA and require updates every 2 hours."
+  },
+  {
+    "id": "q11",
+    "category": "factual",
+    "language": "en",
+    "question": "Within how many hours must a blameless post-mortem be published after resolving a SEV-1 or SEV-2 incident?",
+    "answerable": true,
+    "expected_sources": [{"filename": "05_incident_runbook.md", "page_number": 1}],
+    "reference_answer": "A blameless post-mortem must be published within 48 hours of resolving any SEV-1 or SEV-2 incident."
+  },
+  {
+    "id": "q12",
+    "category": "factual",
+    "language": "en",
+    "question": "What SQL query does the runbook recommend to inspect Neon Postgres connection pool states?",
+    "answerable": true,
+    "expected_sources": [{"filename": "05_incident_runbook.md", "page_number": 1}],
+    "reference_answer": "SELECT state, count(*) FROM pg_stat_activity GROUP BY state;"
+  },
+  {
+    "id": "q13",
+    "category": "factual",
+    "language": "en",
+    "question": "How often must API keys and JWT signing secrets be rotated under SEC-2026?",
+    "answerable": true,
+    "expected_sources": [{"filename": "06_security_guidelines.txt", "page_number": 1}],
+    "reference_answer": "All secrets are stored in environment variables or a managed secret vault and rotated every 90 days."
+  },
+  {
+    "id": "q14",
+    "category": "factual",
+    "language": "en",
+    "question": "How does SEC-2026 classify cross-tenant vector leakage and how is prompt injection defended?",
+    "answerable": true,
+    "expected_sources": [{"filename": "06_security_guidelines.txt", "page_number": 1}],
+    "reference_answer": "Cross-tenant vector leakage is classified as a SEV-1 security incident. Prompt injection is defended by isolating retrieved chunks inside <retrieved_context> XML tags and scrubbing leaked credentials like gsk_ or postgres://."
+  },
+  {
+    "id": "q15",
+    "category": "factual",
+    "language": "en",
+    "question": "What HNSW parameters and embedding dimensions are planned for the Q3 2026 vector infrastructure migration?",
+    "answerable": true,
+    "expected_sources": [{"filename": "07_q3_product_roadmap.pptx", "page_number": 2}],
+    "reference_answer": "Cohere embed-v4.0 with Matryoshka 1024-dim embeddings and HNSW cosine indexing with m=16 and ef_construction=64 alongside GIN tsvector."
+  },
+  {
+    "id": "q16",
+    "category": "tabular",
+    "language": "en",
+    "question": "What is the allocated budget for Hybrid RRF + Rerank GA and the total Q3 platform engineering budget?",
+    "answerable": true,
+    "expected_sources": [{"filename": "07_q3_product_roadmap.pptx", "page_number": 4}],
+    "reference_answer": "Hybrid RRF + Rerank GA is allocated USD 45,000 (target date July 15, 2026), and the total Q3 platform engineering budget is USD 95,000."
+  },
+  {
+    "id": "q17",
+    "category": "tabular",
+    "language": "en",
+    "question": "In the 2025 regional sales CSV, what were the Q1-2025 Enterprise RAG revenue and margin in North America?",
+    "answerable": true,
+    "expected_sources": [{"filename": "08_regional_sales_2025.csv", "page_number": 1}],
+    "reference_answer": "In Q1-2025 North America, Enterprise RAG generated USD 218,700 in revenue with 15 units sold and a 68.5% margin."
+  },
+  {
+    "id": "q18",
+    "category": "multi_chunk",
+    "language": "en",
+    "question": "What is the SEV-1 acknowledgement SLA across both the Engineering Handbook and the Incident Response Runbook?",
+    "answerable": true,
+    "expected_sources": [
+      {"filename": "02_engineering_handbook.pdf", "page_number": 2},
+      {"filename": "05_incident_runbook.md", "page_number": 1}
+    ],
+    "reference_answer": "Both the Engineering Handbook and the Incident Response Runbook specify a 10-minute acknowledgement SLA for SEV-1 alerts."
+  },
+  {
+    "id": "q19",
+    "category": "unanswerable",
+    "language": "en",
+    "question": "What is ACME Cloud Corp's stock ticker symbol on the NASDAQ exchange?",
+    "answerable": false,
+    "expected_sources": [],
+    "reference_answer": "I cannot find sufficient evidence in the uploaded documents to answer this question."
+  },
+  {
+    "id": "q20",
+    "category": "unanswerable",
+    "language": "en",
+    "question": "Who is the current Chief Financial Officer of ACME Cloud Corp?",
+    "answerable": false,
+    "expected_sources": [],
+    "reference_answer": "I cannot find sufficient evidence in the uploaded documents to answer this question."
+  },
+  {
+    "id": "q21",
+    "category": "unanswerable",
+    "language": "en",
+    "question": "What is the capital city of Mars and its current population?",
+    "answerable": false,
+    "expected_sources": [],
+    "reference_answer": "I cannot find sufficient evidence in the uploaded documents to answer this question."
+  },
+  {
+    "id": "q22",
+    "category": "unanswerable",
+    "language": "en",
+    "question": "What dental insurance provider does ACME use for employees in Germany?",
+    "answerable": false,
+    "expected_sources": [],
+    "reference_answer": "I cannot find sufficient evidence in the uploaded documents to answer this question."
+  },
+  {
+    "id": "q23",
+    "category": "unanswerable",
+    "language": "en",
+    "question": "What was ACME's net profit margin in fiscal year 2021?",
+    "answerable": false,
+    "expected_sources": [],
+    "reference_answer": "I cannot find sufficient evidence in the uploaded documents to answer this question."
+  },
+  {
+    "id": "q24",
+    "category": "unanswerable",
+    "language": "en",
+    "question": "How do I bake a chocolate sourdough cake at 350 degrees?",
+    "answerable": false,
+    "expected_sources": [],
+    "reference_answer": "I cannot find sufficient evidence in the uploaded documents to answer this question."
+  },
+  {
+    "id": "q25",
+    "category": "multilingual",
+    "language": "ur",
+    "question": "کل وقتی ملازمین کو سالانہ کتنے دن کی تنخواہ کے ساتھ چھٹی ملتی ہے؟",
+    "answerable": true,
+    "expected_sources": [{"filename": "01_company_hr_policy.pdf", "page_number": 1}],
+    "reference_answer": "کل وقتی ملازمین کو ہر کیلنڈر سال میں 22 دن کی تنخواہ کے ساتھ سالانہ چھٹی ملتی ہے۔"
+  },
+  {
+    "id": "q26",
+    "category": "multilingual",
+    "language": "ur",
+    "question": "سیکیورٹی گائیڈلائنز SEC-2026 کے مطابق API کیز کو کتنے دن بعد تبدیل کرنا ضروری ہے؟",
+    "answerable": true,
+    "expected_sources": [{"filename": "06_security_guidelines.txt", "page_number": 1}],
+    "reference_answer": "SEC-2026 کے مطابق تمام API کیز اور راز ہر 90 دن بعد تبدیل (rotate) کرنا ضروری ہیں۔"
+  },
+  {
+    "id": "q27",
+    "category": "multilingual",
+    "language": "ur",
+    "question": "SEV-1 واقعے کے بعد کتنے گھنٹوں میں پوسٹ مارٹم شائع کرنا لازمی ہے؟",
+    "answerable": true,
+    "expected_sources": [{"filename": "05_incident_runbook.md", "page_number": 1}],
+    "reference_answer": "SEV-1 یا SEV-2 واقعے کے حل کے 48 گھنٹوں کے اندر پوسٹ مارٹم شائع کرنا لازمی ہے۔"
+  },
+  {
+    "id": "q28",
+    "category": "multilingual",
+    "language": "ar",
+    "question": "كم عدد أيام الإجازة السنوية المدفوعة للموظفين بدوام كامل؟",
+    "answerable": true,
+    "expected_sources": [{"filename": "01_company_hr_policy.pdf", "page_number": 1}],
+    "reference_answer": "يحق للموظفين بدوام كامل الحصول على 22 يومًا من الإجازة السنوية المدفوعة في السنة."
+  },
+  {
+    "id": "q29",
+    "category": "multilingual",
+    "language": "ar",
+    "question": "ما هي ميزانية التدريب والتطوير السنوية ورمز المصروفات ACME-EXP-2026؟",
+    "answerable": true,
+    "expected_sources": [{"filename": "01_company_hr_policy.pdf", "page_number": 2}],
+    "reference_answer": "ميزانية التعلم والتطوير السنوية هي 2,400 دولار أمريكي ويجب تقديم الإيصالات خلال 30 يومًا باستخدام الرمز ACME-EXP-2026."
+  },
+  {
+    "id": "q30",
+    "category": "multilingual",
+    "language": "ar",
+    "question": "ما هو الحد الأقصى لحجم الملف المسموح برفعه وفق سياسة الأمان؟",
+    "answerable": true,
+    "expected_sources": [{"filename": "06_security_guidelines.txt", "page_number": 1}],
+    "reference_answer": "الحد الأقصى المسموح به لحجم الملف المرفوع هو 20 ميجابايت."
+  }
+]

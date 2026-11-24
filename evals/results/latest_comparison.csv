@@ -1,0 +1,7 @@
+config,subset,hit_rate@5,recall@5,mrr,refusal_accuracy
+config_a_baseline,overall,0.75,0.75,0.7222,0.1667
+config_a_baseline,english,0.9444,0.9444,0.9074,0.1667
+config_a_baseline,multilingual,0.1667,0.1667,0.1667,1.0
+config_b_optimized,overall,0.75,0.7292,0.75,0.3333
+config_b_optimized,english,1.0,0.9722,1.0,0.3333
+config_b_optimized,multilingual,0.0,0.0,0.0,1.0
