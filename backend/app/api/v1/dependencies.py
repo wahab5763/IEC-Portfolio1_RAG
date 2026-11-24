@@ -1,20 +1,16 @@
-"""FastAPI dependency injection providers and rate limiter instance.
-
-Why this module exists:
-    Keeps route handlers thin and 100% testable via `app.dependency_overrides`.
-    In Phase 1, `get_current_user_id` resolves to the seeded single-tenant
-    system user; in Phase 2, swapping this single dependency enables full JWT
-    multi-tenancy without modifying any route handler.
-"""
+"""FastAPI dependency injection providers, JWT Bearer auth guard, and rate limiter."""
 
 from __future__ import annotations
 
 import uuid
 from functools import lru_cache
 
+from fastapi import Depends
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from slowapi import Limiter
 from slowapi.util import get_remote_address
 
+from backend.app.auth import AuthenticationError, decode_access_token
 from backend.app.config import get_settings
 from backend.app.generation import GroundedGenerator
 from backend.app.ingestion.pipeline import IngestionPipeline
@@ -23,10 +19,33 @@ from backend.app.retrieval import HybridRetriever
 # Per-IP sliding window rate limiter attached to FastAPI app state in main.py
 limiter = Limiter(key_func=get_remote_address)
 
+# Optional Bearer scheme so we return our standardized JSON 401 envelope via AuthenticationError
+_bearer_scheme = HTTPBearer(auto_error=False)
 
-def get_current_user_id() -> uuid.UUID:
-    """Return the active user UUID (default system user in Phase 1 single-tenant mode)."""
-    return get_settings().default_user_id
+
+def get_current_user_id(
+    credentials: HTTPAuthorizationCredentials | None = Depends(_bearer_scheme),
+) -> uuid.UUID:
+    """Resolve authenticated `user_id` from JWT Bearer token (or default user when auth disabled).
+
+    Args:
+        credentials: Parsed `Authorization: Bearer <jwt>` header if provided.
+
+    Returns:
+        Authenticated user UUID enforcing per-tenant DB isolation.
+
+    Raises:
+        AuthenticationError: If `auth_required=True` and token is missing/invalid/expired (401).
+    """
+    settings = get_settings()
+    if credentials is not None and credentials.credentials:
+        return decode_access_token(credentials.credentials)
+
+    if settings.auth_required:
+        raise AuthenticationError(
+            "Authentication required. Provide a valid Bearer JWT token from /api/v1/auth/login."
+        )
+    return settings.default_user_id
 
 
 @lru_cache(maxsize=1)

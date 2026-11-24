@@ -178,6 +178,10 @@ class Settings(BaseSettings):
     )
 
     # --- Single-Tenant Default User & Phase 2 JWT Auth ---
+    auth_required: bool = Field(
+        default=True,
+        description="Require valid JWT Bearer token on document and Q&A routes (Phase 2 Bonus A).",
+    )
     default_user_id: uuid.UUID = Field(
         default=uuid.UUID("00000000-0000-0000-0000-000000000000"),
         description="System user UUID used in Phase 1 single-tenant mode.",

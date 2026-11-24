@@ -221,3 +221,7 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Frontend (React + Vite)
+node_modules/
+frontend/node_modules/

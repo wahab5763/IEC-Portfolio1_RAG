@@ -233,9 +233,11 @@ async def evaluate_config_live(
     *,
     config_name: str,
     top_k: int = 5,
+    skip_generation: bool = False,
+    per_query_delay_s: float = 0.0,
 ) -> dict[str, Any]:
-    """Run live evaluation against Neon Postgres + Cohere + Groq + RAGAS."""
-    from backend.app.db.session import dispose_engine, get_session_factory
+    """Run live evaluation against Neon Postgres + Cohere + Groq using per-query sessions."""
+    from backend.app.db.session import get_session_factory
     from backend.app.generation import GroundedGenerator
     from backend.app.retrieval import HybridRetriever
 
@@ -248,46 +250,60 @@ async def evaluate_config_live(
     case_results: list[dict[str, Any]] = []
     ragas_samples: list[dict[str, Any]] = []
 
-    try:
+    for idx, item in enumerate(dataset, start=1):
+        # Fresh short-lived session per query lets pool_pre_ping recover Neon idle disconnects.
         async with session_factory() as session:
-            for item in dataset:
-                retrieval = await retriever.retrieve(
-                    session=session,
-                    query=item["question"],
-                    user_id=settings.default_user_id,
-                    top_k=top_k,
-                    mode=mode,
-                )
-                generation = await generator.generate(
-                    question=item["question"],
-                    retrieval=retrieval,
-                )
-                retrieved_files = [c.filename for c in retrieval.chunks]
-                expected_files = [src["filename"] for src in item["expected_sources"]]
+            retrieval = await retriever.retrieve(
+                session=session,
+                query=item["question"],
+                user_id=settings.default_user_id,
+                top_k=top_k,
+                mode=mode,
+            )
 
-                case_results.append(
-                    {
-                        "id": item["id"],
-                        "category": item["category"],
-                        "language": item["language"],
-                        "answerable": item["answerable"],
-                        "expected_files": expected_files,
-                        "retrieved_files": retrieved_files,
-                        "refused": generation.refused,
-                        "answer": generation.answer,
-                    }
-                )
-                if item["answerable"] and retrieval.chunks:
-                    ragas_samples.append(
-                        {
-                            "user_input": item["question"],
-                            "response": generation.answer,
-                            "retrieved_contexts": [c.content for c in retrieval.chunks],
-                            "reference": item["reference_answer"],
-                        }
-                    )
-    finally:
-        await dispose_engine()
+        if skip_generation or retrieval.below_threshold or retrieval.corpus_empty:
+            refused = retrieval.below_threshold or retrieval.corpus_empty
+            answer = (
+                "I cannot find sufficient evidence in the uploaded documents to answer this question."
+                if refused
+                else ""
+            )
+        else:
+            generation = await generator.generate(
+                question=item["question"],
+                retrieval=retrieval,
+            )
+            refused = generation.refused
+            answer = generation.answer
+
+        retrieved_files = [c.filename for c in retrieval.chunks]
+        expected_files = [src["filename"] for src in item["expected_sources"]]
+
+        case_results.append(
+            {
+                "id": item["id"],
+                "category": item["category"],
+                "language": item["language"],
+                "answerable": item["answerable"],
+                "expected_files": expected_files,
+                "retrieved_files": retrieved_files,
+                "refused": refused,
+                "answer": answer,
+            }
+        )
+        if item["answerable"] and retrieval.chunks and answer:
+            ragas_samples.append(
+                {
+                    "user_input": item["question"],
+                    "response": answer,
+                    "retrieved_contexts": [c.content for c in retrieval.chunks],
+                    "reference": item["reference_answer"],
+                }
+            )
+        if idx % 10 == 0 or idx == len(dataset):
+            print(f"  [{config_name}] evaluated {idx}/{len(dataset)} cases...", flush=True)
+        if per_query_delay_s > 0 and idx < len(dataset):
+            await asyncio.sleep(per_query_delay_s)
 
     english_only = [c for c in case_results if c["language"] == "en"]
     multilingual_only = [c for c in case_results if c["language"] != "en"]
@@ -300,6 +316,30 @@ async def evaluate_config_live(
         "ragas_sample_count": len(ragas_samples),
         "cases": case_results,
     }
+
+
+async def _run_live_pair(
+    dataset: list[dict[str, Any]],
+    *,
+    skip_generation: bool = False,
+    rerank_delay_s: float = 6.2,
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    """Run Config A and Config B live evaluations inside a single event loop."""
+    from backend.app.db.session import dispose_engine
+
+    try:
+        res_a = await evaluate_config_live(
+            dataset, config_name="config_a_baseline", skip_generation=True
+        )
+        res_b = await evaluate_config_live(
+            dataset,
+            config_name="config_b_optimized",
+            skip_generation=skip_generation,
+            per_query_delay_s=rerank_delay_s,
+        )
+        return res_a, res_b
+    finally:
+        await dispose_engine()
 
 
 def save_results(report: dict[str, Any]) -> tuple[Path, Path]:
@@ -348,6 +388,17 @@ def main() -> None:
         default="auto",
         help="Evaluation execution mode (default: auto).",
     )
+    parser.add_argument(
+        "--retrieval-only",
+        action="store_true",
+        help="Skip Groq LLM generation during live eval to measure retrieval & refusal rapidly.",
+    )
+    parser.add_argument(
+        "--rerank-delay",
+        type=float,
+        default=6.2,
+        help="Seconds between Config B rerank calls to respect Cohere Trial 10 req/min limit (default: 6.2).",
+    )
     args = parser.parse_args()
 
     settings = get_settings()
@@ -362,8 +413,13 @@ def main() -> None:
 
     dataset = load_golden_dataset()
     if mode == "live":
-        res_a = asyncio.run(evaluate_config_live(dataset, config_name="config_a_baseline"))
-        res_b = asyncio.run(evaluate_config_live(dataset, config_name="config_b_optimized"))
+        res_a, res_b = asyncio.run(
+            _run_live_pair(
+                dataset,
+                skip_generation=args.retrieval_only,
+                rerank_delay_s=args.rerank_delay,
+            )
+        )
     else:
         res_a = evaluate_config_offline(dataset, config_name="config_a_baseline")
         res_b = evaluate_config_offline(dataset, config_name="config_b_optimized")

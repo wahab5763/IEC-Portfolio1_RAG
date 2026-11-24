@@ -19,7 +19,7 @@ from backend.app.db.session import get_db
 from backend.app.generation import GroundedGenerator
 from backend.app.guardrails import check_query_input
 from backend.app.ingestion.exceptions import IngestionError
-from backend.app.observability import get_request_id
+from backend.app.observability import get_request_id, record_rag_trace
 from backend.app.retrieval import HybridRetriever
 from backend.app.schemas import (
     AskRequest,
@@ -86,8 +86,22 @@ async def ask_question(
     )
 
     total_ms = round((time.perf_counter() - started) * 1000.0, 2)
+    req_id = get_request_id()
+    record_rag_trace(
+        request_id=req_id,
+        user_id=str(user_id),
+        question=payload.question,
+        answer=generation.answer,
+        model=generation.model,
+        retrieval_latency_ms=retrieval.latency_ms,
+        generation_latency_ms=generation.latency_ms,
+        retrieved_count=len(retrieval.chunks),
+        refused=generation.refused,
+        prompt_tokens=generation.prompt_tokens,
+        completion_tokens=generation.completion_tokens,
+    )
     return AskResponse(
-        request_id=get_request_id(),
+        request_id=req_id,
         answer=generation.answer,
         citations=[
             CitationItem(

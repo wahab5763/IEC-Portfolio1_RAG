@@ -254,15 +254,8 @@ async def test_ask_endpoint_cited_answer_refusal_guardrails_and_errors(api_clien
 
 
 async def test_phase1_frontend_static_assets_served(api_client) -> None:
-    """FastAPI must serve frontend/index.html, styles.css, and app.js at root."""
+    """FastAPI must serve the built React SPA (or static frontend) at root."""
     client, _app = api_client
     html_resp = await client.get("/")
     assert html_resp.status_code == 200
     assert "Retrieved Chunks Inspector" in html_resp.text
-
-    css_resp = await client.get("/styles.css")
-    assert css_resp.status_code == 200
-
-    js_resp = await client.get("/app.js")
-    assert js_resp.status_code == 200
-    assert "/api/v1" in js_resp.text

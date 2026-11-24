@@ -12,7 +12,7 @@ import uuid
 from datetime import datetime
 from typing import Any, Literal
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
 
 class ErrorResponse(BaseModel):
@@ -74,6 +74,16 @@ class DocumentListResponse(BaseModel):
     page: int
     limit: int
     total: int
+    request_id: str
+
+
+class SampleCorpusResponse(BaseModel):
+    """Response model for `POST /api/v1/documents/load-sample-corpus`."""
+
+    loaded_count: int
+    skipped_count: int
+    total_chunks: int
+    filenames: list[str]
     request_id: str
 
 
@@ -141,3 +151,58 @@ class AskResponse(BaseModel):
     generation_latency_ms: float
     total_latency_ms: float
     model: str
+
+
+class SignupRequest(BaseModel):
+    """Request payload for `POST /api/v1/auth/signup`."""
+
+    email: EmailStr = Field(..., description="Valid email address for the new account.")
+    password: str = Field(
+        ...,
+        min_length=8,
+        max_length=128,
+        description="Account password (min 8 chars; stored strictly as Argon2 hash).",
+    )
+
+
+class LoginRequest(BaseModel):
+    """Request payload for `POST /api/v1/auth/login`."""
+
+    email: EmailStr
+    password: str = Field(..., min_length=1, max_length=128)
+
+
+class AuthTokenResponse(BaseModel):
+    """JWT Bearer token response for signup and login endpoints."""
+
+    access_token: str
+    token_type: Literal["bearer"] = "bearer"
+    expires_in: int
+    user_id: uuid.UUID
+    email: str
+    request_id: str
+
+
+class UserProfileResponse(BaseModel):
+    """Authenticated user profile returned by `GET /api/v1/auth/me`."""
+
+    user_id: uuid.UUID
+    email: str
+    created_at: datetime
+    request_id: str
+
+
+class MetricsResponse(BaseModel):
+    """Operational telemetry snapshot returned by `GET /api/v1/metrics`."""
+
+    total_requests: int
+    total_errors: int
+    error_rate: float
+    ask_requests: int
+    p50_latency_ms: float
+    p95_latency_ms: float
+    total_prompt_tokens: int
+    total_completion_tokens: int
+    estimated_cost_usd: float
+    langfuse_enabled: bool
+    request_id: str

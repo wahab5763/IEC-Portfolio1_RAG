@@ -99,7 +99,11 @@ class GroundedGenerator:
                 "GROQ_API_KEY is not configured.",
                 details={"service": "groq_llm"},
             )
-        return AsyncGroq(api_key=self.api_key, timeout=self.timeout_seconds)
+        return AsyncGroq(
+            api_key=self.api_key,
+            timeout=self.timeout_seconds,
+            max_retries=0,
+        )
 
     async def _call_llm(self, user_prompt: str) -> tuple[str, int, int]:
         """Execute Groq chat completion with strict timeout and exponential-backoff retries."""

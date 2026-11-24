@@ -131,8 +131,11 @@ def create_app() -> FastAPI:
     # Mount versioned API routes
     app.include_router(api_v1_router)
 
-    # Serve Phase 1 static HTML/CSS/JS frontend at `/` when `frontend/index.html` exists
-    if (FRONTEND_DIR / "index.html").exists():
+    # Serve Phase 2 built React SPA (`frontend/dist`) if present, else Phase 1 static `frontend/`
+    spa_dist = FRONTEND_DIR / "dist"
+    if (spa_dist / "index.html").exists():
+        app.mount("/", StaticFiles(directory=str(spa_dist), html=True), name="frontend")
+    elif (FRONTEND_DIR / "index.html").exists():
         app.mount("/", StaticFiles(directory=str(FRONTEND_DIR), html=True), name="frontend")
 
     return app
