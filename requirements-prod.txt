@@ -1,0 +1,44 @@
+# ==============================================================================
+# Production RAG Service — Lean Runtime Dependencies for Render Free Tier (512MB)
+# Excludes Jupyter, RAGAS/datasets, PyArrow, and pytest dev tools to minimize RAM
+# and keep Docker builds fast. Full dev/eval deps remain pinned in requirements.txt.
+# ==============================================================================
+
+# --- Core Web Framework & Configuration ---
+fastapi==0.165.0
+uvicorn[standard]==0.54.0
+python-multipart==0.0.34
+pydantic==2.14.4
+pydantic-settings==2.16.3
+python-dotenv==1.2.4
+email-validator==2.4.0
+
+# --- Database & Vector Store (Neon Postgres + pgvector) ---
+sqlalchemy[asyncio]==2.1.9
+asyncpg==0.32.0
+pgvector==0.5.1
+
+# --- LLM, Embeddings & Reranking ---
+cohere==5.21.1
+groq==1.7.0
+httpx==0.28.1
+tenacity==8.5.0
+
+# --- Document Extraction, Validation & Chunking ---
+PyMuPDF==2.1
+pdfplumber==0.11.11
+python-docx==1.2.0
+python-pptx==1.0.2
+chardet==7.7.0
+filetype==1.2.0
+python-magic==0.4.27
+tiktoken==0.14.0
+
+# --- Security, Authentication & Rate Limiting ---
+slowapi==0.1.10
+PyJWT==2.15.1
+pwdlib[argon2]==0.4.2
+
+# --- Observability & Structured Logging ---
+langfuse==5.2.0
+python-json-logger==4.2.0

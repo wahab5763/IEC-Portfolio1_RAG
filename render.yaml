@@ -1,0 +1,38 @@
+# ==============================================================================
+# Render Infrastructure Blueprint — Production RAG Service (Free Tier)
+# Connect your GitHub repo in Render -> New + -> Blueprint -> select this repo.
+# ==============================================================================
+services:
+  - type: web
+    name: production-rag-service
+    runtime: docker
+    plan: free
+    branch: dev
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /api/v1/health
+    autoDeploy: true
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: AUTH_REQUIRED
+        value: "true"
+      - key: COHERE_EMBED_MODEL
+        value: embed-v4.0
+      - key: COHERE_EMBED_DIM
+        value: "1024"
+      - key: COHERE_RERANK_MODEL
+        value: rerank-v5.0-fast
+      - key: GROQ_MODEL
+        value: openai/gpt-oss-120b
+      - key: JWT_SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        sync: false
+      - key: COHERE_API_KEY
+        sync: false
+      - key: GROQ_API_KEY
+        sync: false
+      - key: LANGFUSE_PUBLIC_KEY
+        sync: false
+      - key: LANGFUSE_SECRET_KEY
+        sync: false
