@@ -7,7 +7,7 @@ services:
     name: production-rag-service
     runtime: docker
     plan: free
-    branch: dev
+    branch: main
     dockerfilePath: ./Dockerfile
     healthCheckPath: /api/v1/health
     autoDeploy: true
