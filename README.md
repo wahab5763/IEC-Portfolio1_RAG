@@ -1,10 +1,13 @@
 # Production RAG Service (`IEC-Portfolio1_RAG`)
 
-> **Live Deployment (Render + Neon Postgres):**
-> - **Web App (React + Tailwind SPA)**: https://production-rag-service.onrender.com/
-> - **Swagger OpenAPI Docs**: https://production-rag-service.onrender.com/docs
-> - **Health Check**: https://production-rag-service.onrender.com/api/v1/health
-> - **Operational Metrics (`p50`/`p95`, tokens, cost)**: https://production-rag-service.onrender.com/api/v1/metrics
+> **Live Deployment & Submission Links:**
+> - **Live Web App (React + Tailwind SPA)**: https://production-rag-service.onrender.com/
+> - **Live Swagger OpenAPI Docs**: https://production-rag-service.onrender.com/docs
+> - **Live Health Check**: https://production-rag-service.onrender.com/api/v1/health
+> - **Live Operational Metrics (`p50`/`p95`, tokens, cost)**: https://production-rag-service.onrender.com/api/v1/metrics
+> - **Project Demo Video**: https://drive.google.com/file/d/1nQ9cIdGgdxLQNrUzLraaYitz-vItPVuc/view?usp=sharing
+> - **Swagger & Neon DB Screenshots**: [docs/Swagger_ss/](docs/Swagger_ss/) (9 screenshots)
+> - **AI Usage Documentation**: [docs/AI_USAGE.md](docs/AI_USAGE.md) · **Technical Guide & Checklist**: [docs/app_detail.pdf](docs/app_detail.pdf)
 >
 > *(Note: Hosted on Render Free Tier — if the service was idle for >15 minutes, the first request takes ~30–50 seconds to wake up.)*
 
@@ -40,7 +43,9 @@ IEC-Portfolio1_RAG/
 ├── EVAL.md                      # Golden set, Config A vs B benchmarks & failure analysis
 ├── docs/
 │   ├── architecture.png         # End-to-end system architecture blueprint
-│   ├── app_detail.pdf           # Concise 6-page technical guide & rubric checklist
+│   ├── app_detail.pdf           # Concise 6-page technical guide & 100% completed rubric checklist
+│   ├── AI_USAGE.md              # Complete AI usage transparency & chronological prompt log
+│   ├── Swagger_ss/              # 9 Swagger UI API test & Neon Postgres verification screenshots
 │   └── plan_build.html          # Master architecture & build plan
 ├── backend/app/
 │   ├── config.py                # Pydantic BaseSettings + Neon asyncpg URL normalizer
